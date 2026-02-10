@@ -4,115 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Olga Frolova — AI Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
-    min-height: 100vh;
-    background: #0a0a0f;
-    font-family: 'Montserrat', sans-serif;
-    color: #fff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1a1a2e;
+    line-height: 1.6;
+    background: #EBF5FB;
     overflow-x: hidden;
+    min-height: 100vh;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+  @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  .fade-in { opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .fade-in-d1 { animation-delay: 0.15s; }
+  .fade-in-d2 { animation-delay: 0.3s; }
+  .fade-in-d3 { animation-delay: 0.45s; }
+  .fade-in-d4 { animation-delay: 0.6s; }
+
+  /* === HERO === */
+  .hero {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px 40px;
+    background: linear-gradient(135deg, #0A1628 0%, #0D2A4A 30%, #1A4B7A 60%, #0A1628 100%);
     position: relative;
-  }
-
-  /* === ANIMATED BACKGROUND === */
-  canvas#bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-  }
-
-  .bg-glow {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.15;
-    z-index: 0;
-    animation: floatGlow 12s ease-in-out infinite alternate;
-  }
-  .bg-glow.g1 { width: 500px; height: 500px; background: #c9a84c; top: -10%; left: -10%; }
-  .bg-glow.g2 { width: 400px; height: 400px; background: #8b6914; bottom: -10%; right: -10%; animation-delay: -4s; }
-  .bg-glow.g3 { width: 300px; height: 300px; background: #d4af37; top: 50%; left: 50%; animation-delay: -8s; }
-
-  @keyframes floatGlow {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(60px, -40px) scale(1.2); }
-  }
-
-  /* === MARQUEE === */
-  .marquee-wrap {
-    position: relative;
-    z-index: 2;
     overflow: hidden;
-    border-top: 1px solid rgba(212, 175, 55, 0.15);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-    padding: 10px 0;
-    background: rgba(10, 10, 15, 0.6);
-    backdrop-filter: blur(10px);
+    text-align: center;
   }
-  .marquee-wrap.top { margin-bottom: 0; }
-  .marquee-wrap.bottom { margin-top: 20px; }
-
-  .marquee {
-    display: flex;
-    width: max-content;
-    animation: marquee 25s linear infinite;
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(42,171,238,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(42,171,238,0.10) 0%, transparent 50%);
+    animation: gradientShift 15s ease infinite;
+    background-size: 200% 200%;
   }
-  .marquee-wrap.bottom .marquee { animation-direction: reverse; }
-
-  .marquee span {
-    font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(212, 175, 55, 0.5);
-    white-space: nowrap;
-    padding: 0 40px;
-  }
-  .marquee span .star {
-    color: rgba(212, 175, 55, 0.3);
-    margin: 0 15px;
-  }
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* === MAIN === */
-  .container {
+  .hero-content {
     position: relative;
-    z-index: 2;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px 60px;
-  }
-
-  /* === CARDS ROW === */
-  .cards-zone {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(212,175,55,0.15);
-    border-radius: 24px;
-    padding: 32px 28px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 60px rgba(255,255,255,0.02);
-  }
-  .cards-row {
-    display: flex;
-    gap: 20px;
-    align-items: stretch;
-  }
-  .card-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  @media (max-width: 600px) {
-    .cards-row { flex-direction: column; }
+    z-index: 1;
+    max-width: 600px;
   }
 
   /* === AVATAR === */
@@ -122,411 +69,284 @@
     margin-bottom: 24px;
   }
   .avatar {
-    width: 110px;
-    height: 110px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #d4af37, #8b6914, #d4af37);
     padding: 3px;
-    animation: rotateGold 6s linear infinite;
-    position: relative;
+    background: linear-gradient(135deg, #2AABEE, #6AB2F2, #2AABEE);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
   }
   .avatar-inner {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
+    border: 3px solid #0A1628;
   }
   .avatar-inner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  @keyframes rotateGold {
-    0% { background: linear-gradient(0deg, #d4af37, #8b6914, #d4af37); }
-    25% { background: linear-gradient(90deg, #d4af37, #8b6914, #d4af37); }
-    50% { background: linear-gradient(180deg, #d4af37, #8b6914, #d4af37); }
-    75% { background: linear-gradient(270deg, #d4af37, #8b6914, #d4af37); }
-    100% { background: linear-gradient(360deg, #d4af37, #8b6914, #d4af37); }
-  }
 
-  /* === HEADER TEXT === */
-  .header-name {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #d4af37, #f5e6a3, #c9a84c, #f5e6a3, #d4af37);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 4s ease-in-out infinite;
-    margin-bottom: 8px;
-  }
-  @keyframes shimmer {
-    0% { background-position: 0% center; }
-    50% { background-position: 200% center; }
-    100% { background-position: 0% center; }
-  }
-
-  .header-sub {
-    text-align: center;
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: rgba(212, 175, 55, 0.5);
-    margin-bottom: 40px;
-  }
-
-  /* === SECTION LABEL === */
-  .section-label {
-    font-family: 'Playfair Display', serif;
-    font-size: 11px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: rgba(212, 175, 55, 0.4);
-    text-align: center;
+  /* === HERO TEXT === */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.85);
     margin-bottom: 20px;
-    position: relative;
+    backdrop-filter: blur(10px);
   }
-  .section-label::before,
-  .section-label::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 60px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3));
+  .hero-badge .dot {
+    width: 8px; height: 8px;
+    background: #2AABEE;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
   }
-  .section-label::before { right: calc(50% + 80px); }
-  .section-label::after { left: calc(50% + 80px); transform: rotate(180deg); }
-
-  /* === CARDS === */
-  .card-heading {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #d4af37, #f5e6a3, #c9a84c);
+  .hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero h1 .g-text {
+    background: linear-gradient(135deg, #2AABEE, #6AB2F2, #2AABEE);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+
+  /* === MARQUEE === */
+  .marquee-wrap {
+    overflow: hidden;
+    padding: 12px 0;
+    background: linear-gradient(135deg, #0D2A4A, #1A4B7A);
+  }
+  .marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+    padding: 0 30px;
+  }
+  .marquee .star { color: rgba(42,171,238,0.4); margin: 0 12px; }
+
+  /* === MAIN SECTION === */
+  .main-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 60px;
+  }
+  .section-label {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #229ED9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
     text-align: center;
-    margin-bottom: 6px;
-    line-height: 1.3;
+    width: 100%;
+  }
+
+  /* === CARDS ROW === */
+  .cards-row {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .card-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (max-width: 640px) {
+    .cards-row { flex-direction: column; }
+  }
+
+  /* === CARD HEADING === */
+  .card-heading {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    text-align: center;
+    margin-bottom: 4px;
   }
   .card-heading-sub {
     text-align: center;
-    font-size: 12px;
-    color: rgba(212,175,55,0.45);
+    font-size: 0.82rem;
+    color: #229ED9;
+    font-weight: 600;
     margin-bottom: 16px;
-    letter-spacing: 1px;
   }
 
+  /* === CARD === */
   .card {
     position: relative;
-    margin-bottom: 0;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(212,175,55,0.18);
-    padding: 24px;
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid #AED6F1;
+    padding: 28px;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     flex: 1;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     overflow: hidden;
     cursor: pointer;
   }
-  .card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
   .card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(212,175,55,0.35);
-    box-shadow: 0 12px 40px rgba(212,175,55,0.08), 0 0 60px rgba(212,175,55,0.04);
+    transform: translateY(-6px);
+    border-color: #2AABEE;
+    box-shadow: 0 20px 50px rgba(34,158,217,0.15);
   }
-  .card:hover::before { opacity: 1; }
 
   .card-logo {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     border-radius: 14px;
     object-fit: cover;
-    margin-bottom: 14px;
-    border: 1px solid rgba(212,175,55,0.15);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+    border: 2px solid #AED6F1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .card-icon {
-    font-size: 32px;
-    margin-bottom: 14px;
-    display: block;
-  }
+  .card:hover .card-logo { transform: scale(1.08); }
+
   .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 19px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #d4af37, #f5e6a3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1a1a2e;
     margin-bottom: 8px;
   }
   .card-desc {
-    font-size: 13px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.55);
+    font-size: 0.88rem;
+    color: #666;
     line-height: 1.6;
-    margin-bottom: 14px;
-  }
-  .card-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 30px;
-    border: 1px solid rgba(212,175,55,0.25);
-    color: #d4af37;
-    background: rgba(212,175,55,0.06);
+    margin-bottom: 18px;
   }
 
   .card-btn {
     display: block;
     margin-top: auto;
-    padding-top: 18px;
   }
   .card-btn span {
     display: block;
     text-align: center;
-    padding: 12px 20px;
-    border-radius: 30px;
-    border: 1px solid rgba(212,175,55,0.3);
-    background: rgba(212,175,55,0.06);
-    color: #d4af37;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.4s;
+    padding: 14px 24px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #229ED9, #2AABEE);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.3s;
   }
   .card:hover .card-btn span {
-    background: linear-gradient(135deg, #d4af37, #c9a84c);
-    color: #0a0a0f;
-    border-color: #d4af37;
-    box-shadow: 0 4px 20px rgba(212,175,55,0.25);
-  }
-
-  /* === SPARKLE PARTICLES === */
-  .sparkle {
-    position: fixed;
-    width: 3px; height: 3px;
-    background: #d4af37;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    animation: sparkleFloat 5s ease-in-out infinite;
-  }
-  @keyframes sparkleFloat {
-    0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
-    50% { opacity: 0.7; transform: translateY(-60px) scale(1); }
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(34,158,217,0.4);
   }
 
   /* === FOOTER === */
   .footer {
+    background: #0A1628;
+    color: rgba(255,255,255,0.4);
+    padding: 28px 24px;
     text-align: center;
-    padding: 30px 20px;
-    font-size: 11px;
-    color: rgba(212,175,55,0.25);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  /* === FADE IN === */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 0.8s ease forwards;
-  }
-  .fade-in:nth-child(1) { animation-delay: 0.1s; }
-  .fade-in:nth-child(2) { animation-delay: 0.25s; }
-  .fade-in:nth-child(3) { animation-delay: 0.4s; }
-  .fade-in:nth-child(4) { animation-delay: 0.55s; }
-  .fade-in:nth-child(5) { animation-delay: 0.7s; }
-  .fade-in:nth-child(6) { animation-delay: 0.85s; }
-
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+    font-size: 0.82rem;
   }
 
   /* === SCROLLBAR === */
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #0a0a0f; }
-  ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: #EBF5FB; }
+  ::-webkit-scrollbar-thumb { background: #AED6F1; border-radius: 2px; }
 </style>
 </head>
 <body>
 
-<canvas id="bg"></canvas>
+<!-- === HERO === -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="avatar-wrap fade-in">
+      <div class="avatar">
+        <div class="avatar-inner"><img src="Ольга фото.JPG" alt="Olga Frolova"></div>
+      </div>
+    </div>
+    <div class="hero-badge fade-in fade-in-d1">
+      <span class="dot"></span>
+      AI Creator & Digital Tools
+    </div>
+    <h1 class="fade-in fade-in-d2"><span class="g-text">Olga Frolova</span></h1>
+    <p class="hero-sub fade-in fade-in-d3">Создаю с помощью нейросетей. Генерация фото, видео и музыки — попробуйте мои AI-инструменты бесплатно.</p>
+  </div>
+</section>
 
-<div class="bg-glow g1"></div>
-<div class="bg-glow g2"></div>
-<div class="bg-glow g3"></div>
-
-<!-- Top marquee -->
-<div class="marquee-wrap top">
+<!-- === MARQUEE === -->
+<div class="marquee-wrap">
   <div class="marquee">
-    <span>AI Генерация <em class="star">✦</em> Фото & Видео <em class="star">✦</em> Музыка <em class="star">✦</em> Нейросети <em class="star">✦</em> Креатив <em class="star">✦</em> AI Генерация <em class="star">✦</em> Фото & Видео <em class="star">✦</em> Музыка <em class="star">✦</em> Нейросети <em class="star">✦</em> Креатив <em class="star">✦</em></span>
-    <span>AI Генерация <em class="star">✦</em> Фото & Видео <em class="star">✦</em> Музыка <em class="star">✦</em> Нейросети <em class="star">✦</em> Креатив <em class="star">✦</em> AI Генерация <em class="star">✦</em> Фото & Видео <em class="star">✦</em> Музыка <em class="star">✦</em> Нейросети <em class="star">✦</em> Креатив <em class="star">✦</em></span>
+    <span>AI Генерация <em class="star">&#10022;</em> Фото & Видео <em class="star">&#10022;</em> Музыка <em class="star">&#10022;</em> Нейросети <em class="star">&#10022;</em> Креатив <em class="star">&#10022;</em> AI Генерация <em class="star">&#10022;</em> Фото & Видео <em class="star">&#10022;</em> Музыка <em class="star">&#10022;</em> Нейросети <em class="star">&#10022;</em> Креатив <em class="star">&#10022;</em></span>
+    <span>AI Генерация <em class="star">&#10022;</em> Фото & Видео <em class="star">&#10022;</em> Музыка <em class="star">&#10022;</em> Нейросети <em class="star">&#10022;</em> Креатив <em class="star">&#10022;</em> AI Генерация <em class="star">&#10022;</em> Фото & Видео <em class="star">&#10022;</em> Музыка <em class="star">&#10022;</em> Нейросети <em class="star">&#10022;</em> Креатив <em class="star">&#10022;</em></span>
   </div>
 </div>
 
-<div class="container">
-
-  <!-- Avatar -->
-  <div class="avatar-wrap fade-in">
-    <div class="avatar">
-      <div class="avatar-inner"><img src="Ольга фото.JPG" alt="Olga Frolova"></div>
-    </div>
-  </div>
-
-  <!-- Name -->
-  <div class="fade-in">
-    <h1 class="header-name">Olga Frolova</h1>
-    <p class="header-sub">AI Creator & Digital Tools</p>
-  </div>
-
-  <div class="cards-zone fade-in">
+<!-- === CARDS === -->
+<div class="main-section">
+  <div class="section-label fade-in fade-in-d3">Мои AI-инструменты</div>
   <div class="cards-row">
 
-    <!-- Card 1: CreativUp -->
-    <div class="card-col">
+    <div class="card-col fade-in fade-in-d3">
       <div class="card-heading">Здесь я генерирую фото/видео</div>
       <div class="card-heading-sub">(3 генерации бесплатно)</div>
       <a href="https://t.me/CreativUp_bot?start=ref_REF2MLFHRQGU" target="_blank" class="card">
         <img class="card-logo" src="https://cdn4.telesco.pe/file/XuG4APCDqVPH6ZBFH8GUDhJLDbU5i4b6tgyVW-eyV1gk4NroJ3MZIcTC0W_4niDLtb0ZH4uZslXrIu5kfHEG4sUpqXCeQ2ILNFJtOiLkqG5AetR_jRBDS1cv0tkfx6plvBVI3AWRfzbE9pyvbPpv3N9xxtznZ2KIkfJBW8C6Hi85RSonlc14aXcK3lHtZGdlHnhl82pyD4WtA9ZC7HV01TKmuAcxEma6IVOeO9okokSXoauSGUnPsL8bWWg0BtXaB5aVtuPH-NCCIayhAyb69dW1Lvn2KuZOZIJzVBijW3X5RtdLNmZqRzdvRP5hZymikUba4VeXK2zeVNzNJ7BUhQ.jpg" alt="CreativUp">
         <div class="card-title">CreativUp</div>
-        <div class="card-desc">
-          Генерация потрясающих фото и видео с помощью нейросетей. Превратите идеи в визуальные шедевры за секунды.
-        </div>
-        <div class="card-btn"><span>Перейти →</span></div>
+        <div class="card-desc">Генерация потрясающих фото и видео с помощью нейросетей. Превратите идеи в визуальные шедевры за секунды.</div>
+        <div class="card-btn"><span>Перейти &rarr;</span></div>
       </a>
     </div>
 
-    <!-- Card 2: Hits Music -->
-    <div class="card-col">
+    <div class="card-col fade-in fade-in-d4">
       <div class="card-heading">Здесь я генерирую музыку</div>
       <div class="card-heading-sub">(первая песня бесплатно)</div>
       <a href="https://t.me/hits_musicbot?start=ref_ga-6yPsy044" target="_blank" class="card">
         <img class="card-logo" src="https://cdn4.telesco.pe/file/K_CgfSmjAXaY2KOlJZX37ctdRPA7CJhwMbD9aqCy6ho6mrROwmVbly0TYWbRKvceXDdQzLmUDMtdc7YHTc5lvkQx8b7j5SnaqcwL_iwtVMGOhrpbkJY7HE4CmD5CxkQ-CkFEJFM0Ckii2bU3NgEenTJ4PYPHCITfWa6tNaWrUJAP6JfSalvKM-sFXjvErWcJH__22yel2FV89q7KGGEd87QIB4gbJwuPmKSsGAPUp0NqDWbnTqmNMyGMrtEFBDE_TGH01TSiYXuBDypB7yaX_EwB9Z3LhUwtX8mskMF5w2FsHELi2hj1ORSjWqzA7eAYs7uoKmMXX9bzKXgNPBWEmg.jpg" alt="Hits Music">
         <div class="card-title">Hits Music</div>
-        <div class="card-desc">
-          Создавайте уникальные песни с помощью искусственного интеллекта. Ваша музыка — от текста до мелодии.
-        </div>
-        <div class="card-btn"><span>Перейти →</span></div>
+        <div class="card-desc">Создавайте уникальные песни с помощью искусственного интеллекта. Ваша музыка — от текста до мелодии.</div>
+        <div class="card-btn"><span>Перейти &rarr;</span></div>
       </a>
     </div>
 
   </div>
-  </div>
-
 </div>
 
-<!-- Bottom marquee -->
-<div class="marquee-wrap bottom">
-  <div class="marquee">
-    <span>Premium AI Tools <em class="star">✦</em> Create With Intelligence <em class="star">✦</em> Olga Frolova <em class="star">✦</em> Premium AI Tools <em class="star">✦</em> Create With Intelligence <em class="star">✦</em> Olga Frolova <em class="star">✦</em></span>
-    <span>Premium AI Tools <em class="star">✦</em> Create With Intelligence <em class="star">✦</em> Olga Frolova <em class="star">✦</em> Premium AI Tools <em class="star">✦</em> Create With Intelligence <em class="star">✦</em> Olga Frolova <em class="star">✦</em></span>
-  </div>
-</div>
-
-<div class="footer">© 2026 Olga Frolova</div>
-
-<script>
-// === PARTICLE BACKGROUND ===
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-let particles = [];
-const PARTICLE_COUNT = 80;
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2 + 0.5;
-    this.speedX = (Math.random() - 0.5) * 0.4;
-    this.speedY = (Math.random() - 0.5) * 0.4;
-    this.opacity = Math.random() * 0.4 + 0.1;
-    this.pulse = Math.random() * Math.PI * 2;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.pulse += 0.02;
-    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-  }
-  draw() {
-    const o = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(212, 175, 55, ${o})`;
-    ctx.fill();
-  }
-}
-
-for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-function drawLines() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 120) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(212, 175, 55, ${0.06 * (1 - dist / 120)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => { p.update(); p.draw(); });
-  drawLines();
-  requestAnimationFrame(animate);
-}
-animate();
-
-// === FLOATING SPARKLES ===
-function createSparkle() {
-  const el = document.createElement('div');
-  el.className = 'sparkle';
-  el.style.left = Math.random() * 100 + '%';
-  el.style.top = Math.random() * 100 + '%';
-  el.style.animationDuration = (3 + Math.random() * 4) + 's';
-  el.style.animationDelay = Math.random() * 3 + 's';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 8000);
-}
-setInterval(createSparkle, 600);
-</script>
+<!-- === FOOTER === -->
+<footer class="footer">
+  <p>&copy; 2026 Olga Frolova &mdash; AI Creator & Digital Tools</p>
+</footer>
 
 </body>
 </html>
