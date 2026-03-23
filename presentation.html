@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40 млн охватов за месяц</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    padding: 12px 24px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #333;
+  }
+
+  .nav button {
+    background: #FF5500;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .nav button:hover { background: #ff7733; }
+  .nav button:disabled { background: #333; cursor: default; }
+
+  .counter {
+    display: flex;
+    align-items: center;
+    color: #aaa;
+    font-size: 14px;
+    min-width: 60px;
+    justify-content: center;
+  }
+
+  .slides-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px 20px 120px;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+  }
+  .slide.active { display: flex; }
+
+  /* ---- ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ ---- */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .blob-orange { background: #FF5500; }
+  .blob-red { background: #FF2200; }
+  .blob-yellow { background: #FF8800; }
+
+  .accent-line {
+    width: 60px;
+    height: 4px;
+    background: #FF5500;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  .slide-num {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+
+  /* ---- ТИПЫ СЛАЙДОВ ---- */
+
+  /* TITLE SLIDE */
+  .slide-title {
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+  }
+  .slide-title .title-left {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+  }
+  .slide-title .title-right {
+    width: 380px;
+    min-width: 380px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .slide-title .photo-wrap {
+    width: 260px;
+    height: 340px;
+    border-radius: 999px 999px 999px 999px;
+    overflow: hidden;
+    border: 3px solid rgba(255,85,0,0.5);
+    box-shadow: 0 0 60px rgba(255,85,0,0.2);
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    color: #444;
+    font-size: 13px;
+    text-align: center;
+  }
+  .slide-title .photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .slide-title .photo-wrap .photo-hint {
+    font-size: 24px;
+    display: block;
+  }
+  .slide-title h1 {
+    font-size: clamp(26px, 4.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    z-index: 1;
+  }
+  .slide-title h1 span { color: #FF5500; }
+  .slide-title .subtitle {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #aaa;
+    z-index: 1;
+  }
+  .slide-title .tag {
+    display: inline-block;
+    background: #FF5500;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+    z-index: 1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+
+  /* BIG STATEMENT */
+  .slide-statement {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px 60px;
+  }
+  .slide-statement .big-num {
+    font-size: clamp(60px, 12vw, 120px);
+    font-weight: 900;
+    color: #FF5500;
+    line-height: 1;
+  }
+  .slide-statement h2 {
+    font-size: clamp(18px, 3vw, 32px);
+    font-weight: 700;
+    margin-top: 16px;
+    color: #fff;
+  }
+  .slide-statement p {
+    font-size: 16px;
+    color: #aaa;
+    margin-top: 12px;
+    max-width: 600px;
+  }
+
+  /* TWO COLUMN */
+  .slide-two-col {
+    flex-direction: row;
+  }
+  .col-left {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .col-right {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    background: rgba(255,255,255,0.02);
+    border-left: 1px solid #1e1e1e;
+  }
+
+  /* CONTENT SLIDE */
+  .slide-content {
+    flex-direction: column;
+    padding: 50px 60px;
+    justify-content: center;
+  }
+
+  .slide-label {
+    font-size: 11px;
+    color: #FF5500;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h2.slide-heading {
+    font-size: clamp(22px, 3.5vw, 40px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  h2.slide-heading span { color: #FF5500; }
+
+  .body-text {
+    font-size: 15px;
+    color: #c8c8c8;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* СПИСОК */
+  .list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 15px;
+    color: #ddd;
+    line-height: 1.5;
+  }
+  .list-item .dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    background: #FF5500;
+    border-radius: 50%;
+    margin-top: 7px;
+  }
+  .list-item .num {
+    font-size: 13px;
+    font-weight: 900;
+    color: #FF5500;
+    min-width: 24px;
+    padding-top: 1px;
+  }
+
+  /* КАРТОЧКИ СТАТИСТИКИ */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .stat-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .stat-card .stat-num {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    color: #FF5500;
+    line-height: 1;
+  }
+  .stat-card .stat-label {
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* PLACEHOLDER для скринов */
+  .screenshot-box {
+    background: #111;
+    border: 2px dashed #333;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #666;
+    font-size: 13px;
+    text-align: center;
+    padding: 16px;
+    min-height: 120px;
+  }
+  .screenshot-box .icon { font-size: 28px; }
+  .screenshot-box span { color: #555; font-size: 12px; }
+
+  .screenshots-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex: 1;
+  }
+  .screenshots-row .screenshot-box { flex: 1; }
+
+  /* ТАБЛИЦА */
+  .branches-table {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .branch-col {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .branch-col.accent { border-color: #FF5500; background: rgba(255,85,0,0.05); }
+  .branch-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .branch-col.accent .branch-title { color: #FF5500; }
+  .branch-desc {
+    font-size: 13px;
+    color: #aaa;
+    line-height: 1.6;
+  }
+
+  /* QUOTE / HIGHLIGHT */
+  .quote-block {
+    border-left: 4px solid #FF5500;
+    padding: 20px 24px;
+    background: rgba(255,85,0,0.05);
+    border-radius: 0 12px 12px 0;
+    margin-top: 20px;
+  }
+  .quote-block p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.5;
+  }
+
+  /* ЛАГЕРИ */
+  .camps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .camp-card {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .camp-card .camp-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FF5500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .camp-card p { font-size: 14px; color: #d0d0d0; line-height: 1.5; }
+
+  /* НИШИ */
+  .niches {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .niche-tag {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: #ddd;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .niche-tag .emoji { font-size: 22px; }
+
+  /* CTA */
+  .slide-cta {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px;
+  }
+  .cta-handle {
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 900;
+    color: #FF5500;
+    margin: 20px 0;
+  }
+  .qr-box {
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 11px;
+    text-align: center;
+    padding: 8px;
+    margin-top: 24px;
+  }
+
+  /* КЕЙС */
+  .case-nums {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .case-num-item {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 16px 20px;
+    min-width: 120px;
+  }
+  .case-num-item .n { font-size: 28px; font-weight: 900; color: #FF5500; }
+  .case-num-item .l { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+  /* HERO full slide */
+  .slide-hero {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px;
+  }
+  .slide-hero h2 {
+    font-size: clamp(30px, 5vw, 56px);
+    font-weight: 900;
+    line-height: 1.2;
+    max-width: 800px;
+  }
+  .slide-hero h2 span { color: #FF5500; }
+  .slide-hero p { font-size: 18px; color: #bbb; margin-top: 16px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="slides-wrapper">
+  <!-- СЛАЙД 1: ТИТУЛ -->
+  <div class="slide slide-title active" id="slide-1">
+    <div class="blob blob-orange" style="width:500px;height:500px;top:-150px;left:-100px;opacity:0.25;"></div>
+    <div class="blob blob-red" style="width:300px;height:300px;bottom:-100px;left:200px;opacity:0.15;"></div>
+    <div class="slide-num">01</div>
+    <div class="title-left">
+      <div class="tag">Личный опыт · Инстаграм · Нейросети</div>
+      <h1>Как я набрала <span>40 млн охватов</span> за месяц в Инстаграм</h1>
+      <div class="subtitle">Фролова Ольга · @frolova_olla<br>Блог о нейросетях и жизни</div>
+    </div>
+    <div class="title-right">
+      <div class="photo-wrap">
+        <img src="Ольга фото.JPG" alt="Фролова Ольга">
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 2: ОБО МНЕ -->
+  <div class="slide slide-two-col" id="slide-2">
+    <div class="blob blob-orange" style="width:350px;height:350px;top:-100px;right:-50px;opacity:0.25;"></div>
+    <div class="slide-num">02</div>
+    <div class="col-left">
+      <div class="slide-label">обо мне</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Фролова Ольга</h2>
+      <p class="body-text">Блог о нейросетях и жизни.<br>@frolova_olla</p>
+      <div class="list-items" style="margin-top: 24px;">
+        <div class="list-item"><div class="dot"></div>Нейросети, ИИ-генерации</div>
+        <div class="list-item"><div class="dot"></div>ИИ-сериалы и контент-стратегии</div>
+        <div class="list-item"><div class="dot"></div>Создатель @hits_musicbot</div>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;gap:20px;">
+      <div style="background:#fff;padding:20px;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:14px;">
+        <div id="qr-slide2"></div>
+        <div style="font-size:14px;color:#111;font-weight:700;letter-spacing:1px;">@frolova_olla</div>
+      </div>
+      <div style="font-size:13px;color:#555;text-align:center;">Подписывайтесь в инстаграм</div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 3: ЗАХВАТ -->
+  <div class="slide slide-statement" id="slide-3">
+    <div class="blob blob-orange" style="width:400px;height:400px;top:-100px;left:-100px;opacity:0.2;"></div>
+    <div class="slide-num">03</div>
+    <div class="big-num">40 000 000</div>
+    <h2>охватов. 27 роликов. 9 из них — миллионники. Самый большой — 11.8 млн</h2>
+    <p>Я просто нашла систему — и она сработала.</p>
+    <div style="margin-top: 12px; display: flex; gap: 10px; justify-content: center;">
+      <img src="статистика 40 млн/IMG_9570.JPG" alt="Статистика" style="max-height:200px;width:auto;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+      <img src="статистика 40 млн/IMG_9571.JPG" alt="Статистика" style="max-height:200px;width:auto;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+      <img src="статистика 40 млн/IMG_9572.JPG" alt="Статистика" style="max-height:200px;width:auto;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 4: КТО ВЕДЁТ СОЦ.СЕТИ? -->
+  <div class="slide slide-hero" id="slide-4">
+    <div class="blob blob-orange" style="width:500px;height:500px;top:-200px;right:-100px;opacity:0.15;"></div>
+    <div class="slide-num">04</div>
+    <h2 style="font-size:clamp(28px,5vw,60px);font-weight:900;line-height:1.2;max-width:800px;text-align:center;">
+      Кто сейчас ведёт<br>соц.сети <span style="color:#FF5500;">активно?</span>
+    </h2>
+    <p style="margin-top:24px;font-size:18px;color:#666;text-align:center;">↑ поднимите руку</p>
+  </div>
+
+  <!-- СЛАЙД 5: КАК УСПЕХИ? -->
+  <div class="slide slide-hero" id="slide-5">
+    <div class="blob blob-orange" style="width:500px;height:500px;bottom:-200px;left:-100px;opacity:0.15;"></div>
+    <div class="slide-num">05</div>
+    <h2 style="font-size:clamp(28px,5vw,64px);font-weight:900;line-height:1.2;text-align:center;">
+      Как успехи?
+    </h2>
+    <div style="display:flex;gap:40px;margin-top:40px;align-items:center;">
+      <div style="text-align:center;">
+        <div style="font-size:80px;line-height:1;">👍</div>
+        <div style="font-size:16px;color:#aaa;margin-top:12px;">Всё идёт хорошо</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:80px;line-height:1;">👎</div>
+        <div style="font-size:16px;color:#aaa;margin-top:12px;">Пока не получается</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 6: ОШИБКА -->
+  <div class="slide slide-hero" id="slide-6">
+    <div class="blob blob-red" style="width:500px;height:500px;top:-200px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">06</div>
+    <div class="slide-label" style="margin-bottom: 20px;">ошибка, которую я допускала всё время ведения соц.сетей</div>
+    <h2 class="slide-heading" style="text-align:center;max-width:700px;font-size:clamp(24px,4vw,48px);">Я делала контент <span>для себя.</span><br>Не для алгоритма. Не для аудитории.</h2>
+    <div class="quote-block" style="margin-top: 30px; text-align: left; max-width: 600px;">
+      <p>«Если тема интересна мне — она будет интересна всем». Это не работает так.</p>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 7: ЧТО ПОВЛИЯЛО -->
+  <div class="slide slide-hero" id="slide-7">
+    <div class="blob blob-orange" style="width:600px;height:600px;bottom:-200px;left:-100px;opacity:0.2;"></div>
+    <div class="slide-num">07</div>
+    <div class="slide-label" style="margin-bottom: 20px;">что повлияло на результат</div>
+    <h2 style="font-size:clamp(24px,4vw,48px);font-weight:900;line-height:1.2;max-width:700px;">Я перестала снимать <span style="color:#FF5500;">что хочу.</span><br>Я начала снимать <span style="color:#FF5500;">что хотят другие.</span></h2>
+    <div style="margin-top: 40px; background: #FF5500; padding: 20px 40px; border-radius: 50px; font-size: 20px; font-weight: 900; letter-spacing: 1px;">
+      ТРЕНДВОТЧИНГ
+    </div>
+  </div>
+
+  <!-- СЛАЙД 8: ОПРЕДЕЛЕНИЕ ТРЕНДВОТЧИНГА -->
+  <div class="slide slide-statement" id="slide-8">
+    <div class="blob blob-orange" style="width:450px;height:450px;bottom:-150px;right:-100px;opacity:0.18;"></div>
+    <div class="slide-num">08</div>
+    <div style="max-width: 780px; text-align: center;">
+      <div class="slide-label" style="margin-bottom: 12px;">определение</div>
+      <h2 style="font-size: clamp(22px, 3.8vw, 42px); font-weight: 900; line-height: 1.2; color: #fff;">
+        Трендвотчинг — это <span style="color:#FF5500;">мониторинг</span> того,<br>что прямо сейчас набирает охваты в вашей нише
+      </h2>
+      <p style="margin-top: 14px; font-size: clamp(14px, 1.6vw, 18px); color: #aaa; line-height: 1.5;">
+        Вы не придумываете тему из головы — вы находите тему,<br>
+        которая <strong style="color:#fff;">интересна людям</strong>, и снимаете её.
+      </p>
+      <div style="margin-top: 20px; display: flex; gap: 16px; justify-content: center; align-items: center;">
+        <div style="background: rgba(255,85,0,0.12); border: 1px solid rgba(255,85,0,0.4); border-radius: 12px; padding: 12px 22px; font-size: 14px; color: #fff;">
+          <span style="color:#FF5500; font-weight:900; display:block; font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px;">не это</span>
+          «Сниму то, что мне нравится»
+        </div>
+        <div style="font-size: 20px; color: #555;">→</div>
+        <div style="background: rgba(255,85,0,0.25); border: 1px solid rgba(255,85,0,0.7); border-radius: 12px; padding: 12px 22px; font-size: 14px; color: #fff;">
+          <span style="color:#FF5500; font-weight:900; display:block; font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px;">а это</span>
+          «Сниму то, что нравится другим»
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 9: КАК ДЕЛАТЬ ТРЕНДВОТЧИНГ -->
+  <div class="slide slide-two-col" id="slide-9">
+    <div class="blob blob-orange" style="width:300px;height:300px;top:-50px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">09</div>
+    <div class="col-left" style="padding:30px 36px;">
+      <div class="slide-label">трендвотчинг · моя система</div>
+      <div class="accent-line" style="margin-bottom:12px;"></div>
+      <h2 class="slide-heading" style="font-size:clamp(18px,2.8vw,32px);margin-bottom:8px;">Как делать <span>на практике</span></h2>
+      <div class="list-items" style="margin-top:10px;gap:8px;">
+        <div class="list-item" style="font-size:13px;"><div class="num">01</div><span>Подпишись на <strong>20–30 крупных аккаунтов</strong> в нише — которые сейчас растут</span></div>
+        <div class="list-item" style="font-size:13px;"><div class="num">02</div><span>Заходи в их профиль и смотри только то, что залетело</span></div>
+        <div class="list-item" style="font-size:13px;"><div class="num">03</div><span>Следи за зарубежными — они часто на 2–4 недели впереди по трендам</span></div>
+        <div class="list-item" style="font-size:13px;"><div class="num">04</div><span>Смотри что ищут в поиске Инстаграм прямо сейчас</span></div>
+        <div class="list-item" style="font-size:13px;"><div class="num">05</div><span>Нашёл идею — <strong>снимай сразу</strong>, пока тема интересна</span></div>
+      </div>
+      <div class="quote-block" style="margin-top:12px;padding:12px 16px;">
+        <p style="font-size:14px;">Трендвотчинг — это не разовое действие. Это привычка.</p>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;">
+      <img src="скрин трендвотчинг .jpg" alt="Трендвотчинг" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 10: ГЛАВНЫЙ ПРИНЦИП -->
+  <div class="slide slide-content" id="slide-10">
+    <div class="blob blob-orange" style="width:350px;height:350px;top:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">10</div>
+    <div class="slide-label">главный принцип</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">Не изобретай <span>велосипед.</span></h2>
+    <div class="camps" style="margin-top: 24px;">
+      <div class="camp-card">
+        <div class="camp-num">Сначала</div>
+        <p>Посмотри, что уже сработало у других — и возьми за основу. Велосипед уже создан, тебе нужно его доработать под себя.</p>
+      </div>
+      <div class="camp-card" style="border-color: #FF5500; background: rgba(255,85,0,0.05);">
+        <div class="camp-num" style="color: #FF5500;">Когда вырос на контенте</div>
+        <p>Тогда можно создавать что-то своё, новое, ни на что не похожее. Но сначала — изучи, что работает.</p>
+      </div>
+    </div>
+    <div class="quote-block" style="margin-top: 20px;">
+      <p>Велосипед уже создан. Возьми его за базу — и сделай лучше. 🚲</p>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 11: ВОПРОС — ТИПЫ КОНТЕНТА -->
+  <div class="slide slide-hero" id="slide-11">
+    <div class="blob blob-orange" style="width:400px;height:400px;top:-150px;left:-100px;opacity:0.15;"></div>
+    <div class="slide-num">11</div>
+    <h2 style="font-size:clamp(28px,5vw,64px);font-weight:900;line-height:1.2;text-align:center;">
+      Какие бывают<br><span style="color:#FF5500;">типы контента?</span>
+    </h2>
+  </div>
+
+  <!-- СЛАЙД 12: 3 ТИПА КОНТЕНТА -->
+  <div class="slide slide-content" id="slide-12">
+    <div class="slide-num">12</div>
+    <div class="slide-label">система контента</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">Я выделяю <span>3 типа</span></h2>
+    <div class="branches-table" style="margin-top:20px;">
+
+      <!-- Привлекающие -->
+      <div class="branch-col accent" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:48px;line-height:1;">🎣</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#FF5500;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">01</div>
+          <div class="branch-title">Привлекающие</div>
+          <div class="branch-desc">Широкая тема, вирусный потенциал. Ловят новую аудиторию.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;">
+          <div style="background:rgba(255,85,0,0.15);border-radius:6px;padding:4px 10px;font-size:11px;color:#FF5500;">Рилс</div>
+          <div style="background:rgba(255,85,0,0.15);border-radius:6px;padding:4px 10px;font-size:11px;color:#FF5500;">Тренды</div>
+          <div style="background:rgba(255,85,0,0.15);border-radius:6px;padding:4px 10px;font-size:11px;color:#FF5500;">Охват</div>
+        </div>
+      </div>
+
+      <!-- Вовлекающие -->
+      <div class="branch-col" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:48px;line-height:1;">🔥</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#FF5500;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">02</div>
+          <div class="branch-title">Вовлекающие</div>
+          <div class="branch-desc">Углубляют интерес, строят доверие. Удерживают тех, кто пришёл.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;">
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">Карусели</div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">Истории</div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">Сериалы</div>
+        </div>
+      </div>
+
+      <!-- Продающие -->
+      <div class="branch-col" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:48px;line-height:1;">💰</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#FF5500;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">03</div>
+          <div class="branch-title">Продающие</div>
+          <div class="branch-desc">Конкретный оффер, призыв к действию. Конвертируют в клиентов.</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;">
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">Оффер</div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">Кейсы</div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:#aaa;">CTA</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- СЛАЙД 13: ШИРОКИЙ vs НИШЕВОЙ -->
+  <div class="slide slide-content" id="slide-13">
+    <div class="blob blob-orange" style="width:300px;height:300px;top:-100px;right:-50px;opacity:0.15;"></div>
+    <div class="slide-num">13</div>
+    <div class="slide-label">развенчиваем миф</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">«Не снимайте широкий контент» —<br><span>говорят эксперты...</span></h2>
+    <div class="camps" style="margin-top:20px;">
+      <div class="camp-card">
+        <div class="camp-num">Точечный · нишевой контент</div>
+        <p>Только своя аудитория смотрит. Охваты маленькие, но «тёплые». Эксперты советуют именно его.</p>
+      </div>
+      <div class="camp-card" style="border-color:#FF5500;background:rgba(255,85,0,0.05);">
+        <div class="camp-num" style="color:#FF5500;">Вирусный формат</div>
+        <p>Широкая тема — миллионы просмотров. Да, % ЦА меньше. Но в абсолютных числах ЦА больше в десятки раз.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 14: ЦЕННОСТЬ В АБСОЛЮТНЫХ ЧИСЛАХ -->
+  <div class="slide slide-hero" id="slide-14">
+    <div class="blob blob-orange" style="width:500px;height:500px;bottom:-150px;right:-100px;opacity:0.15;"></div>
+    <div class="slide-num">14</div>
+    <div class="slide-label" style="margin-bottom:20px;">ключевой вывод</div>
+    <h2 style="font-size:clamp(20px,3.5vw,42px);font-weight:900;line-height:1.3;max-width:800px;text-align:center;">
+      Ценность не в % ЦА от просмотров,<br>а в <span style="color:#FF5500;">абсолютном числе</span>
+    </h2>
+    <p style="margin-top:24px;font-size:17px;color:#bbb;max-width:700px;text-align:center;line-height:1.6;">
+      10 000 целевых из миллиона — лучше, чем 100 целевых из 1 000.<br>
+      Поэтому вирусный широкоохватный ролик даёт <strong style="color:#fff;">больше ЦА в штуках</strong>, даже при низком % попадания.
+    </p>
+  </div>
+
+  <!-- СЛАЙД 15: ПРИМЕР — МАСТЕРСКАЯ ИГРУШЕК -->
+  <div class="slide slide-content" id="slide-15" style="padding:24px 36px;justify-content:flex-start;">
+    <div class="blob blob-orange" style="width:300px;height:300px;top:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">15</div>
+    <div class="slide-label">пример · Филиус</div>
+    <div class="accent-line" style="margin-bottom:8px;"></div>
+    <h2 class="slide-heading" style="margin-bottom:0;font-size:clamp(16px,2vw,26px);">Мастерская <span>детских игрушек</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:10px;flex:1;min-height:0;overflow:hidden;">
+      <div style="display:flex;flex-direction:column;gap:6px;overflow:hidden;background:#0d0d0d;border:1px solid #FF5500;border-radius:10px;padding:12px;">
+        <div style="font-size:12px;font-weight:700;color:#FF5500;letter-spacing:1px;flex-shrink:0;">Привлекающий</div>
+        <div style="font-size:11px;color:#aaa;line-height:1.4;flex-shrink:0;">Психолог рассказывает о плохом сне ребёнка — нужна игрушка для хорошего сна</div>
+        <img src="филиус статистика/привлекающий.jpg" style="width:100%;border-radius:6px;object-fit:cover;min-height:0;flex:1;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;overflow:hidden;background:#0d0d0d;border:1px solid #222;border-radius:10px;padding:12px;">
+        <div style="font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;flex-shrink:0;">Вовлекающий</div>
+        <div style="font-size:11px;color:#aaa;line-height:1.4;flex-shrink:0;">Мультик с персонажами игрушки — разные сюжеты, аудитория возвращается</div>
+        <img src="филиус статистика/вовлекающий.jpg" style="width:100%;border-radius:6px;object-fit:cover;min-height:0;flex:1;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;overflow:hidden;background:#0d0d0d;border:1px solid #222;border-radius:10px;padding:12px;">
+        <div style="font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;flex-shrink:0;">Продающий</div>
+        <div style="font-size:11px;color:#aaa;line-height:1.4;flex-shrink:0;">Дети создают игрушки в мастерской — и оффер</div>
+        <img src="филиус статистика/продающий.jpg" style="width:100%;border-radius:6px;object-fit:cover;min-height:0;flex:1;">
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 16: РЕЗУЛЬТАТЫ КЕЙСА -->
+  <div class="slide slide-two-col" id="slide-16">
+    <div class="blob blob-orange" style="width:300px;height:300px;bottom:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">16</div>
+    <div class="col-left">
+      <div class="slide-label">результаты · 1 месяц работы</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Вот такие <span>результаты</span></h2>
+      <div class="case-nums" style="margin-top:20px;">
+        <div class="case-num-item">
+          <div class="n">2.5 млн</div>
+          <div class="l">просмотров<br>рилс 1</div>
+        </div>
+        <div class="case-num-item">
+          <div class="n">1 млн</div>
+          <div class="l">просмотров<br>рилс 2</div>
+        </div>
+        <div class="case-num-item">
+          <div class="n">+10 000</div>
+          <div class="l">новых<br>подписчиков</div>
+        </div>
+      </div>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Охваты превратились в реальные заявки.</p>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;">
+      <img src="филиус подписчики.JPG" alt="Филиус подписчики" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 17: СОЦ.СЕТИ — НЕ РАЗВЛЕЧЕНИЕ -->
+  <div class="slide slide-content" id="slide-17" style="justify-content:center;align-items:center;">
+    <div class="blob blob-orange" style="width:500px;height:500px;top:-150px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">17</div>
+    <h2 style="font-size:clamp(16px,2.4vw,28px);font-weight:900;line-height:1.3;text-align:center;margin-bottom:28px;">
+      Социальные сети — это <span style="color:#FF5500;">управляемые касания</span> с аудиторией.<br>
+      <span style="font-size:0.8em;color:#bbb;font-weight:600;">Каждое касание увеличивает вероятность сделки.</span>
+    </h2>
+
+    <!-- Воронка из людей -->
+    <div style="display:flex;gap:32px;align-items:flex-end;justify-content:center;">
+
+      <!-- Смотрят -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;width:200px;gap:2px;line-height:1;">
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#FF5500;letter-spacing:1px;text-transform:uppercase;">Смотрят</div>
+        <div style="font-size:22px;font-weight:900;color:#fff;">1 000 000</div>
+      </div>
+
+      <div style="font-size:28px;color:#333;padding-bottom:48px;">→</div>
+
+      <!-- Подписываются -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;width:90px;gap:2px;line-height:1;">
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#FF5500;letter-spacing:1px;text-transform:uppercase;">Подписываются</div>
+        <div style="font-size:22px;font-weight:900;color:#fff;">1 000</div>
+      </div>
+
+      <div style="font-size:28px;color:#333;padding-bottom:48px;">→</div>
+
+      <!-- Покупают -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;width:60px;gap:2px;line-height:1;">
+          <span style="font-size:22px;opacity:1;">👤</span><span style="font-size:22px;opacity:1;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+          <span style="font-size:22px;opacity:0.25;">👤</span><span style="font-size:22px;opacity:0.25;">👤</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#FF5500;letter-spacing:1px;text-transform:uppercase;">Покупают</div>
+        <div style="font-size:22px;font-weight:900;color:#fff;">10</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- СЛАЙД 18: ЧТО ДАЁТ ДОПОЛНИТЕЛЬНЫЕ ПРОСМОТРЫ -->
+  <div class="slide slide-content" id="slide-18">
+    <div class="blob blob-orange" style="width:300px;height:300px;top:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">18</div>
+    <div class="slide-label">вспомогательные инструменты</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">Что даёт <span>дополнительные просмотры</span></h2>
+    <div class="branches-table" style="margin-top: 24px;">
+      <div class="branch-col accent">
+        <div class="branch-title">👤 Известные люди</div>
+        <div class="branch-desc">Упомяни популярного человека — его аудитория ищет контент про него и находит тебя. Алгоритм подхватывает имя.</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-title">📦 Известные продукты</div>
+        <div class="branch-desc">Брендовые названия, популярные инструменты, приложения — люди ищут их, попадают на твой ролик.</div>
+      </div>
+      <div class="branch-col">
+        <div class="branch-title">🔤 Горячие слова</div>
+        <div class="branch-desc">Слова и фразы, которые сейчас у всех на слуху — они увеличивают охват через поиск и рекомендации.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 19: СЕКРЕТ БЫСТРОГО РОСТА -->
+  <div class="slide slide-hero" id="slide-19">
+    <div class="blob blob-orange" style="width:500px;height:500px;top:-150px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">19</div>
+    <div class="slide-label" style="margin-bottom: 20px;">секрет быстрого роста</div>
+    <h2 style="font-size:clamp(28px,5vw,58px);font-weight:900;line-height:1.2;max-width:800px;text-align:center;">
+      Делай больше попыток,<br>чем делают <span style="color:#FF5500;">все остальные.</span>
+    </h2>
+    <p style="margin-top: 20px; font-size: 17px; color: #bbb; max-width: 650px; text-align: center; line-height: 1.6;">
+      Большинство снимают 1–2 рилса и ждут результата.<br>
+      Если только начинаете — <strong style="color:#fff;">выложите 50 рилсов</strong> и сделайте выводы.
+    </p>
+    <div style="display: flex; gap: 24px; margin-top: 36px; align-items: center;">
+      <div style="text-align: center;">
+        <div style="font-size: clamp(32px,5vw,56px); font-weight: 900; color: #333; line-height: 1;">1–2</div>
+        <div style="font-size: 13px; color: #555; margin-top: 6px;">рилса в месяц<br>у большинства</div>
+      </div>
+      <div style="font-size:32px;color:#444;">→</div>
+      <div style="text-align: center;">
+        <div style="font-size: clamp(32px,5vw,56px); font-weight: 900; color: #FF5500; line-height: 1;">50+</div>
+        <div style="font-size: 13px; color: #aaa; margin-top: 6px;">рилсов для старта<br>чтобы понять что работает</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 20: КЕЙС АРИНА -->
+  <div class="slide slide-two-col" id="slide-20">
+    <div class="blob blob-orange" style="width:350px;height:350px;top:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">20</div>
+    <div class="col-left" style="padding:30px 36px;">
+      <div class="slide-label">кейс · фитнес</div>
+      <div class="accent-line" style="margin-bottom:10px;"></div>
+      <h2 class="slide-heading" style="font-size:clamp(16px,2.6vw,30px);margin-bottom:0;">Арина — <span>5 млн подписчиков</span> в Инстаграм</h2>
+      <div class="list-items" style="margin-top:12px;gap:8px;">
+        <div class="list-item" style="font-size:13px;">
+          <div class="dot"></div>
+          <span>Выкладывала <strong>10 рилсов в день</strong>. Перевыкладывала по 2+ раза залетевшие видео</span>
+        </div>
+        <div class="list-item" style="font-size:13px;">
+          <div class="dot"></div>
+          <span>Только <strong>полезные и болевые темы</strong> — не о себе, а о том, что волнует зрителя</span>
+        </div>
+        <div class="list-item" style="font-size:13px;">
+          <div class="dot"></div>
+          <span>Огромный объём попыток → алгоритм начал продвигать → аудитория росла лавиной</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:rgba(255,85,0,0.08);border:1px solid rgba(255,85,0,0.3);border-radius:10px;padding:10px 14px;">
+        <div style="font-size:12px;color:#ccc;line-height:1.5;">
+          Итог: <strong style="color:#fff;">фитнес-марафоны продавались сами</strong> — аудитория уже была лояльна и доверяла ей как эксперту.
+        </div>
+      </div>
+    </div>
+    <div class="col-right">
+      <img src="арина .PNG" alt="Арина Рыкова" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 21: SUBMAGIC -->
+  <div class="slide slide-hero" id="slide-21">
+    <div class="blob blob-orange" style="width:400px;height:400px;bottom:-150px;left:-100px;opacity:0.2;"></div>
+    <div class="slide-num">21</div>
+    <div class="slide-label" style="margin-bottom:20px;">лайфхак</div>
+    <h2 style="font-size:clamp(22px,4vw,48px);font-weight:900;line-height:1.3;max-width:800px;text-align:center;">
+      Как легко превратить <span style="color:#FF5500;">ютуб-ролик</span><br>в нарезку из 50 видео
+    </h2>
+    <div style="margin-top:36px;background:#fff;border-radius:20px;padding:28px 48px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;max-width:480px;">
+      <img src="https://cdn.prod.website-files.com/6469e2294ac68c3d5caea327/649e98f880d73b35d8d12194_Main%20Logo.svg" alt="SubMagic" style="height:44px;width:auto;">
+      <div style="font-size:14px;color:#555;line-height:1.5;">ИИ-нарезка на вертикальный формат<br>с субтитрами — за минуты</div>
+      <div style="background:#000;color:#fff;font-size:13px;font-weight:700;padding:8px 24px;border-radius:30px;letter-spacing:1px;">submagic.co</div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 22: ФОКУС. СТАБИЛЬНОСТЬ. СПРИНТ. -->
+  <div class="slide slide-content" id="slide-22">
+    <div class="blob blob-orange" style="width:400px;height:400px;bottom:-150px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">22</div>
+    <div class="slide-label">есть цель — есть рост</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">Фокус. Стабильность. <span>Спринт.</span></h2>
+    <div class="quote-block" style="margin-top:24px;max-width:700px;">
+      <p>Соц.сети — это как спорт. У вас не появятся мышцы с первой тренировки, но если будете заниматься стабильно — будете прогрессировать.</p>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 23: ЧТО МНЕ ДАЛ ОХВАТ -->
+  <div class="slide slide-two-col" id="slide-23">
+    <div class="blob blob-orange" style="width:300px;height:300px;bottom:-100px;right:-50px;opacity:0.2;"></div>
+    <div class="slide-num">23</div>
+    <div class="col-left">
+      <div class="slide-label">бонус к охватам</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Что мне дал охват <span>кроме 10 000+ новой аудитории</span></h2>
+      <div class="list-items" style="margin-top: 16px;">
+        <div class="list-item"><div class="dot"></div>Входящие заявки на генерации и проекты — без единого продающего поста. Сделала закреп в самом видео своего комментария</div>
+        <div class="list-item"><div class="dot"></div>Предложения рекламы от других блогеров</div>
+        <div class="list-item"><div class="dot"></div>Коллаборации — блогеры сами выходили на меня</div>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;">
+      <img src="закреп коммента.jpg" alt="Закреплённый комментарий" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 24: ЧЕСТНЫЙ РАЗБОР -->
+  <div class="slide slide-hero" id="slide-24">
+    <div class="blob blob-red" style="width:500px;height:500px;bottom:-200px;left:-100px;opacity:0.15;"></div>
+    <div class="slide-num">24</div>
+    <div class="slide-label" style="margin-bottom: 20px;">честный разбор</div>
+    <h2 style="font-size:clamp(20px,3.2vw,40px);font-weight:900;line-height:1.3;max-width:800px;text-align:center;">Моя цель изначально была — <span style="color:#FF5500;">аудитория.</span><br>Не деньги. Я хотела быть блогером.</h2>
+    <p style="margin-top:24px;font-size:17px;color:#bbb;max-width:700px;text-align:center;line-height:1.6;">
+      А как пошла аудитория, я захотела денег —<br>
+      <strong style="color:#fff;">создали ИИ-генерацию песен и Агрегатор нейросетей в ТГ</strong>
+    </p>
+  </div>
+
+  <!-- СЛАЙД 25: ИИ-СЕРИАЛЫ -->
+  <div class="slide slide-two-col" id="slide-25">
+    <div class="blob blob-orange" style="width:400px;height:400px;top:-100px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">25</div>
+    <div class="col-left">
+      <div class="slide-label">что дальше · тренд для всех ниш</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">ИИ-сериалы — <span>это сейчас тренд</span></h2>
+      <p class="body-text" style="margin-top:16px;">Это не просто контент — это персонаж, история, вовлечённость. Аудитория возвращается, потому что хочет узнать что дальше.</p>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Наверняка видели, как в нише здоровья говорящий позвоночник учит, как с ним обращаться 🦴</p>
+      </div>
+    </div>
+    <div class="col-right" style="padding:20px;align-items:center;justify-content:center;">
+      <video id="video-slide-25" src="остеопат видео.MP4" muted playsinline
+        style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></video>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 26: ЛАНА ДУБАЙСКАЯ -->
+  <div class="slide slide-two-col" id="slide-26">
+    <div class="blob blob-orange" style="width:400px;height:400px;bottom:-150px;left:-100px;opacity:0.2;"></div>
+    <div class="slide-num">26</div>
+    <div class="col-left">
+      <div class="slide-label">реальный кейс · ИИ-сериал</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Лана <span>Дубайская</span></h2>
+      <p class="body-text" style="margin-top:16px;">Запустила ИИ-сериал в Инстаграм. Аудитория росла лавиной — люди возвращались за продолжением.</p>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Написала в сторис, что купила Мерседес. После запуска ИИ-сериала. 🚗</p>
+      </div>
+    </div>
+    <div class="col-right" style="padding:20px;align-items:center;justify-content:center;">
+      <video id="video-slide-26" src="Лана дубайская.MP4" muted playsinline
+        style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></video>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 26b: СНЕГУРОЧКА -->
+  <div class="slide slide-two-col" id="slide-26b">
+    <div class="blob blob-orange" style="width:400px;height:400px;top:-150px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">26</div>
+    <div class="col-left">
+      <div class="slide-label">реальный кейс · ИИ-сериал</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading"><span>Снегурочка</span> в Инстаграм</h2>
+      <p class="body-text" style="margin-top:16px;">Запустила ИИ-персонажа прямо перед Новым годом. Взорвала Инстаграм — аудитория ждала каждую серию.</p>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Купила BMW после запуска сериала. 🚙</p>
+      </div>
+    </div>
+    <div class="col-right" style="padding:20px;align-items:center;justify-content:center;">
+      <video id="video-slide-26b" src="снегурочка.MP4" muted playsinline
+        style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></video>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 27: КАРУСЕЛИ -->
+  <div class="slide slide-two-col" id="slide-27">
+    <div class="blob blob-orange" style="width:400px;height:400px;top:-150px;left:-100px;opacity:0.2;"></div>
+    <div class="slide-num">27</div>
+    <div class="col-left">
+      <div class="slide-label">недооценённый формат</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Карусели — <span>бесплатный вирусный трафик</span></h2>
+      <p class="body-text" style="margin-top:16px;">
+        Если попасть в боль аудитории — люди пересылают друзьям, сохраняют, возвращаются.
+      </p>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Пересылаемость — крышесносная.</p>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;">
+      <img src="скрин остеопат.jpg" alt="Скрин карусели" style="width:100%;height:100%;object-fit:contain;border-radius:12px;">
+    </div>
+  </div>
+
+  <!-- СЛАЙД 28: КАРУСЕЛИ С ИИ -->
+  <div class="slide slide-two-col" id="slide-28">
+    <div class="blob blob-orange" style="width:300px;height:300px;bottom:-100px;left:-50px;opacity:0.2;"></div>
+    <div class="slide-num">28</div>
+    <div class="col-left">
+      <div class="slide-label">карусели с помощью ИИ</div>
+      <div class="accent-line"></div>
+      <h2 class="slide-heading">Делай карусели <span>за минуты</span></h2>
+      <p class="body-text" style="margin-top:16px;">На основе ваших ютуб-роликов, любых видео, чужих роликов — ИИ делает карусель автоматически.</p>
+      <div class="quote-block" style="margin-top:20px;">
+        <p>Один ролик → 10 каруселей</p>
+      </div>
+    </div>
+    <div class="col-right" style="align-items:center;justify-content:center;gap:24px;">
+      <div class="screenshot-box" style="width:100%;min-height:120px;">
+        <div class="icon">🔗</div>
+        <strong>Ссылка на инструмент</strong>
+        <span>добавить ссылку</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;align-self:center;">
+        <div style="background:#fff;padding:14px;border-radius:16px;">
+          <div id="qr-slide29"></div>
+        </div>
+        <div style="font-size:13px;color:#aaa;text-align:center;">@CreativUp_bot</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 29: КЛЮЧЕВАЯ МЫСЛЬ -->
+  <div class="slide slide-content" id="slide-29">
+    <div class="blob blob-orange" style="width:400px;height:400px;bottom:-150px;right:-100px;opacity:0.2;"></div>
+    <div class="slide-num">29</div>
+    <div class="slide-label">ключевая мысль</div>
+    <div class="accent-line"></div>
+    <h2 class="slide-heading">С чего <span>начать прямо сейчас</span></h2>
+    <div class="list-items" style="margin-top:24px;gap:18px;">
+      <div class="list-item"><div class="num">01</div><span style="font-size:16px;">Выберите <strong>тему блога</strong></span></div>
+      <div class="list-item"><div class="num">02</div><span style="font-size:16px;">Найдите <strong>50 роликов</strong> в вашей нише, которые залетели</span></div>
+      <div class="list-item"><div class="num">03</div><span style="font-size:16px;">Переснимите их и <strong>уводите людей с них в вашу воронку</strong> за подписку</span></div>
+      <div class="list-item"><div class="num">04</div><span style="font-size:16px;"><strong>Масштабируйте</strong> то, что лучше приносит результат</span></div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 30: СПАСИБО -->
+  <div class="slide slide-cta" id="slide-30" style="padding:36px;gap:10px;">
+    <div class="blob blob-orange" style="width:500px;height:500px;top:-150px;right:-150px;opacity:0.25;"></div>
+    <div class="blob blob-red" style="width:300px;height:300px;bottom:-100px;left:-50px;opacity:0.2;"></div>
+    <div class="slide-num">30</div>
+    <div class="slide-label">спасибо за внимание</div>
+    <h2 style="font-size:clamp(18px,2.4vw,30px);font-weight:900;margin-top:8px;">Подписывайтесь на инстаграм:</h2>
+    <div class="cta-handle" style="font-size:clamp(28px,4.5vw,52px);">@frolova_olla</div>
+    <div style="background:#fff;padding:12px;border-radius:14px;margin-top:8px;">
+      <div id="qr-slide30"></div>
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:#777;max-width:560px;line-height:1.5;text-align:center;">
+      Пишите, если хотите разработать стратегию продвижения для своего бизнеса<br>и увеличить количество заявок с помощью контента
+    </p>
+  </div>
+
+</div><!-- /slides-wrapper -->
+
+<!-- НАВИГАЦИЯ -->
+<div class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" disabled>← Назад</button>
+  <span class="counter" id="counter">1 / 31</span>
+  <button id="nextBtn" onclick="changeSlide(1)">Вперёд →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  const videos = [
+    { el: document.getElementById('video-slide-25'), idx: Array.from(slides).findIndex(s => s.id === 'slide-25') },
+    { el: document.getElementById('video-slide-26'), idx: Array.from(slides).findIndex(s => s.id === 'slide-26') },
+    { el: document.getElementById('video-slide-26b'), idx: Array.from(slides).findIndex(s => s.id === 'slide-26b') },
+  ];
+
+  function changeSlide(dir) {
+    // Остановить все видео при уходе
+    videos.forEach(v => { if (v.el && current === v.idx) { v.el.pause(); v.el.currentTime = 0; } });
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(slides.length - 1, current + dir));
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + slides.length;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    // Запустить видео при входе
+    videos.forEach(v => { if (v.el && current === v.idx) { v.el.play(); } });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+</script>
+
+<script>
+  new QRCode(document.getElementById('qr-slide2'), {
+    text: 'https://www.instagram.com/frolova_olla/',
+    width: 200,
+    height: 200,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  new QRCode(document.getElementById('qr-slide30'), {
+    text: 'https://www.instagram.com/frolova_olla/',
+    width: 180,
+    height: 180,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  new QRCode(document.getElementById('qr-slide29'), {
+    text: 'https://t.me/CreativUp_bot',
+    width: 180,
+    height: 180,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>
