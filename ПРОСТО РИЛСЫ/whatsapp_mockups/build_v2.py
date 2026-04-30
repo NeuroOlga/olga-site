@@ -29,18 +29,42 @@ CSS = """
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
   width: 1080px; height: 1920px;
-  background: #efeae2;
+  background: #000;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
 }
+/* Чёрный холст 1080×1920. Контент чата живёт внутри .safe-zone,
+   которая занимает середину экрана — Instagram-overlay'и (имя сверху,
+   подпись/лайки снизу) ложатся на чёрные полосы и не закрывают чат. */
 .slide {
   width: 1080px; height: 1920px;
   position: relative;
+  background: #000;
+}
+/* Instagram safe-zone:
+   Внутри чёрного 1080×1920 рендерим WhatsApp 1080×1170 как раньше,
+   но дополнительно ужимаем через transform: scale, чтобы вокруг был
+   запас под Instagram-overlay'и:
+   - Сверху ~360px чёрного — ник IG, аватар, иконки.
+   - Снизу ~600px чёрного — подпись, лайки, музыка, кнопки.
+   - По бокам ~97px чёрного — на всякий случай.
+   Содержимое чата (шрифт, аватары, пузыри) визуально уменьшается до 82%. */
+.safe-zone {
+  position: absolute;
+  top: 360px;
+  left: 0;
+  width: 1080px;
+  height: 1170px;
   background-color: #efeae2;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><g fill="%23d4ccbe" opacity="0.45"><circle cx="20" cy="20" r="3"/><circle cx="80" cy="50" r="3"/><circle cx="50" cy="90" r="3"/><circle cx="100" cy="100" r="3"/><circle cx="35" cy="60" r="2"/><circle cx="70" cy="25" r="2"/><circle cx="95" cy="75" r="2.5"/><path d="M30 25 Q35 20 40 25 T50 25" stroke="%23d4ccbe" stroke-width="2" fill="none"/><path d="M70 70 Q72 67 75 70 T82 70" stroke="%23d4ccbe" stroke-width="2" fill="none"/></g></svg>');
+  overflow: hidden;
+  transform: scale(0.82);
+  transform-origin: top center;
 }
 
+/* Шапка чата прибита к верху safe-zone (т.е. фактически на 280px от верха кадра).
+   Так имя «Мартин Хозяин квартиры» гарантированно не закрывается ник-оверлеем IG. */
 .chat-header {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -65,7 +89,8 @@ html, body {
 .chat-header .status { font-size: 26px; color: #667781; margin-top: 4px; }
 .chat-header .icons { display: flex; gap: 28px; align-items: center; color: #54656f; font-size: 48px; }
 
-/* Контейнер сообщений: pin to bottom — старые уходят вверх, новые внизу */
+/* Контейнер сообщений: pin to bottom — старые уходят вверх, новые внизу.
+   Координаты относительно .safe-zone, т.е. реально занимает y=430..1450 кадра. */
 .chat-area {
   position: absolute;
   top: 150px; left: 0; right: 0; bottom: 0;
@@ -105,12 +130,14 @@ html, body {
 .bubble.out .meta { color:#667781; }
 .checks { font-size: 30px; letter-spacing: -8px; line-height: 1; color:#53bdeb; margin-left:4px; }
 
-/* media (с фото) */
+/* media (с фото).
+   max-height у фото уменьшен с 900 до 720 — иначе в safe-zone (~1020px высоты)
+   фото+подпись+другие сообщения не влезают. */
 .bubble.media { padding: 6px 6px 30px; max-width: 70%; }
 .bubble.media .photo {
   display: block;
   width: 100%;
-  max-height: 900px;
+  max-height: 720px;
   object-fit: cover;
   border-radius: 18px;
 }
@@ -294,7 +321,7 @@ def page(content, solo: bool = False):
     area_class = "chat-area solo" if solo else "chat-area"
     return f"""<!DOCTYPE html>
 <html lang="ru"><head><meta charset="UTF-8"><style>{CSS}</style></head>
-<body><div class="slide">{CHAT_HEADER}<div class="{area_class}">{content}</div></div></body></html>"""
+<body><div class="slide"><div class="safe-zone">{CHAT_HEADER}<div class="{area_class}">{content}</div></div></div></body></html>"""
 
 
 # === Хронология чата ===
