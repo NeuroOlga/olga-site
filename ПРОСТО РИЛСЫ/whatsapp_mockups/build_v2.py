@@ -13,6 +13,7 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT = os.path.dirname(DIR)
 
 PHOTO_BANYA = os.path.join(PROJECT, "slide1_real.png")
+PHOTO_SELFIE = os.path.join(PROJECT, "slide5_real.png")
 PHOTO_CROWD = os.path.join(PROJECT, "slide8_real.png")
 
 
@@ -143,6 +144,22 @@ html, body {
   margin-left: 8px;
 }
 
+/* SOLO режим для слайда 9: голосовое сообщение по центру, увеличенное */
+.chat-area.solo {
+  justify-content: center;
+}
+.bubble.voice.solo {
+  min-width: 820px;
+  max-width: 92%;
+  padding: 28px 30px 36px;
+  gap: 22px;
+}
+.bubble.voice.solo .voice-play { width: 80px; height: 80px; font-size: 56px; }
+.bubble.voice.solo .voice-wave { height: 70px; gap: 5px; }
+.bubble.voice.solo .voice-time { font-size: 36px; }
+.bubble.voice.solo .voice-speed { font-size: 32px; padding: 10px 22px; }
+.bubble.voice.solo .voice-mic-btn { width: 80px; height: 80px; font-size: 40px; }
+
 /* панель реакций — над пузырём */
 .with-reactions { position: relative; }
 .reactions-bar {
@@ -177,29 +194,74 @@ CHAT_HEADER = """
 """
 
 
-def render_message(msg, photo_uris):
-    """Возвращает HTML одной строки чата (.row + .bubble)."""
+VOICE_BARS = [30, 55, 80, 60, 45, 70, 90, 50, 35, 65, 80, 55, 40, 70, 60, 80, 45, 30, 55, 70, 90, 60, 40, 50]
+VOICE_TOTAL_SEC = 22  # длительность голосового
+
+
+def fmt_voice_time(seconds: float) -> str:
+    s = int(round(seconds))
+    return f"{s // 60}:{s % 60:02d}"
+
+
+def render_voice(msg, direction, time, progress: float = 0.0, solo: bool = False) -> str:
+    """Рендер голосового сообщения с визуализацией прогресса.
+
+    progress 0..1 — какая часть проиграна. Сыгранные бары становятся серыми,
+    несыгранные — синие. Таймер показывает текущее время (если играет) или
+    полную длительность (если ещё не запускалось).
+    """
+    n = len(VOICE_BARS)
+    bars_html = []
+    for i, h in enumerate(VOICE_BARS):
+        played = (i + 0.5) / n <= progress
+        color = '#8696a0' if played else '#007aff'
+        bars_html.append(f'<span style="height:{h}%; background:{color}"></span>')
+    bars = "".join(bars_html)
+
+    # Если идёт проигрывание (progress > 0) — иконка паузы и текущее время.
+    # Если ещё не запущено — иконка play и полное время.
+    if progress > 0:
+        play_icon = '❚❚'
+        current_sec = progress * VOICE_TOTAL_SEC
+        time_label = fmt_voice_time(current_sec)
+    else:
+        play_icon = '▶'
+        time_label = msg.get("voice_dur", fmt_voice_time(VOICE_TOTAL_SEC))
+
+    solo_class = ' solo' if solo else ''
+    bubble_html = (
+        f'<div class="bubble voice {direction}{solo_class}">'
+        f'<button class="voice-play">{play_icon}</button>'
+        f'<div class="voice-wave">{bars}</div>'
+        f'<div class="voice-time">{time_label}</div>'
+        f'<div class="voice-speed">1×</div>'
+        f'<div class="voice-mic-btn">🎤</div>'
+        + (f'<span class="meta">{time}</span>' if not solo else '')
+        + '</div>'
+    )
+
+    if solo:
+        # Соло режим — без ярлыка «Непрослушанное», без чекмарков, центрирован
+        return f'<div class="row {direction}">{bubble_html}</div>'
+
+    # В кумулятивном чате (если когда-нибудь использовать) — с ярлыком
+    unread = '<div class="voice-header-label">Непрослушанное сообщение</div>' if msg.get("voice_unread") else ''
+    return f'<div class="row {direction}"><div>{unread}{bubble_html}</div></div>'
+
+
+def render_message(msg, photo_uris, is_latest=False):
+    """Возвращает HTML одной строки чата (.row + .bubble).
+
+    is_latest=True — это последнее сообщение текущего слайда. Только в этом
+    случае показываем панель реакций (она транзитная — как при долгом нажатии
+    в реальном WhatsApp), чтобы на последующих слайдах она не перекрывала
+    предыдущие сообщения сверху.
+    """
     direction = msg["dir"]
     time = msg.get("time", "")
 
     if msg.get("voice"):
-        bars = "".join(
-            f'<span style="height:{h}%"></span>'
-            for h in [30, 55, 80, 60, 45, 70, 90, 50, 35, 65, 80, 55, 40, 70, 60, 80, 45, 30, 55, 70, 90, 60, 40, 50]
-        )
-        unread = '<div class="voice-header-label">Непрослушанное сообщение</div>' if msg.get("voice_unread") else ''
-        bubble = (
-            f'<div class="bubble voice {direction}">'
-            f'<button class="voice-play">▶</button>'
-            f'<div class="voice-wave">{bars}</div>'
-            f'<div class="voice-time">{msg.get("voice_dur", "0:00")}</div>'
-            f'<div class="voice-speed">1×</div>'
-            f'<div class="voice-mic-btn">🎤</div>'
-            f'<span class="meta">{time}</span>'
-            f'</div>'
-        )
-        # Заголовок-ярлык над пузырём + сам пузырь
-        return f'<div class="row {direction}"><div>{unread}{bubble}</div></div>'
+        return render_voice(msg, direction, time, progress=msg.get("progress", 0.0), solo=msg.get("solo", False))
 
     if msg.get("photo"):
         photo_uri = photo_uris[msg["photo"]]
@@ -214,21 +276,12 @@ def render_message(msg, photo_uris):
         )
         return f'<div class="row {direction}">{bubble}</div>'
 
-    # Обычный текстовый пузырь
+    # Обычный текстовый пузырь.
+    # Поле msg["reactions"] оставлено в данных для совместимости, но панель
+    # реакций больше не рендерится — она перекрывала текст предыдущих сообщений.
     text = msg.get("text", "")
-    reactions_html = ''
-    wrapper_class = ''
-    if msg.get("reactions"):
-        wrapper_class = ' with-reactions'
-        reactions_html = (
-            '<div class="reactions-bar">'
-            '<span>👍</span><span>❤️</span><span>😂</span><span>😮</span><span>😢</span><span>🙏</span><span>👌</span>'
-            '<div class="add">+</div>'
-            '</div>'
-        )
     bubble = (
-        f'<div class="bubble {direction}{wrapper_class}">'
-        f'{reactions_html}'
+        f'<div class="bubble {direction}">'
         f'{text}'
         f'<span class="meta">{time}'
         f'{"<span class=checks>✓✓</span>" if direction == "out" else ""}'
@@ -237,10 +290,11 @@ def render_message(msg, photo_uris):
     return f'<div class="row {direction}">{bubble}</div>'
 
 
-def page(content):
+def page(content, solo: bool = False):
+    area_class = "chat-area solo" if solo else "chat-area"
     return f"""<!DOCTYPE html>
 <html lang="ru"><head><meta charset="UTF-8"><style>{CSS}</style></head>
-<body><div class="slide">{CHAT_HEADER}<div class="chat-area">{content}</div></div></body></html>"""
+<body><div class="slide">{CHAT_HEADER}<div class="{area_class}">{content}</div></div></body></html>"""
 
 
 # === Хронология чата ===
@@ -255,6 +309,11 @@ THREAD = [
     {"id": "s4", "dir": "in",
      "text": "Какую ещё баню?? Это ВАННАЯ КОМНАТА",
      "time": "20:30"},
+
+    # Селфи Ольги (эскалация — она наслаждается процессом).
+    # На самом слайде 5 показывается полноэкранным фото; в чате появляется
+    # с этого момента и виден на слайдах 6, 7, 8, 9 как часть переписки.
+    {"id": "s5_chat", "dir": "out", "text": "", "time": "20:31", "photo": "SELFIE"},
 
     {"id": "s6", "dir": "in",
      "text": "Завтра вы выезжаете из квартиры",
@@ -272,7 +331,8 @@ THREAD = [
      "voice_unread": True, "time": "20:35"},
 ]
 
-# Слайд → до какого id переписки показывать (включительно)
+# Слайд → до какого id переписки показывать (включительно).
+# Слайд 9 (голосовое) рендерится отдельно как соло-анимация (build_slide9_animated_frames).
 SLIDE_OUTPUTS = [
     ("slide2_olga_invite", "s2"),
     ("slide3_martin_shock", "s3"),
@@ -280,8 +340,9 @@ SLIDE_OUTPUTS = [
     ("slide6_martin_threat", "s6"),
     ("slide7_martin_command", "s7"),
     ("slide8_olga_crowd", "s8"),
-    ("slide9_voice", "s9"),
 ]
+
+SLIDE9_FRAMES = 22  # 22 кадра по 1 fps = 22 секунды анимации проигрывания
 
 
 def build_slide_html(name, last_id, photo_uris):
@@ -291,42 +352,101 @@ def build_slide_html(name, last_id, photo_uris):
         msgs.append(m)
         if m["id"] == last_id:
             break
-    rendered = "\n".join(render_message(m, photo_uris) for m in msgs)
+    rendered_parts = []
+    for i, m in enumerate(msgs):
+        is_latest = (i == len(msgs) - 1)
+        rendered_parts.append(render_message(m, photo_uris, is_latest=is_latest))
+    rendered = "\n".join(rendered_parts)
     out = os.path.join(DIR, name + ".html")
     with open(out, "w", encoding="utf-8") as f:
         f.write(page(rendered))
     return out
 
 
+def build_slide9_solo_html(progress: float, frame_idx: int) -> str:
+    """HTML для одного кадра слайда 9 (соло, голосовое в центре с прогрессом)."""
+    msg = {
+        "id": "s9",
+        "dir": "in",
+        "voice": True,
+        "voice_dur": "0:22",
+        "progress": progress,
+        "solo": True,
+    }
+    rendered = render_voice(msg, "in", "", progress=progress, solo=True)
+    out = os.path.join(DIR, f"slide9_voice_f{frame_idx:02d}.html")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(page(rendered, solo=True))
+    return out
+
+
 def main():
     # удалить старые
     for f in os.listdir(DIR):
-        if f.startswith("slide") and (f.endswith(".html") or f.endswith(".png")):
+        if f.startswith("slide") and (f.endswith(".html") or f.endswith(".png") or f.endswith(".mp4")):
             os.remove(os.path.join(DIR, f))
 
     photo_uris = {
         "BANYA": img_to_data_uri(PHOTO_BANYA),
+        "SELFIE": img_to_data_uri(PHOTO_SELFIE),
         "CROWD": img_to_data_uri(PHOTO_CROWD),
     }
 
     htmls = []
     for name, last_id in SLIDE_OUTPUTS:
         h = build_slide_html(name, last_id, photo_uris)
-        htmls.append(h)
+        htmls.append((name, h))
         print(f"  HTML: {name} (до {last_id})")
+
+    # Слайд 9: 22 кадра анимированного проигрывания голосового (1 кадр/сек)
+    slide9_htmls = []
+    for i in range(SLIDE9_FRAMES):
+        # progress в начале каждой секунды: 0/22 на 1-м кадре, 21/22 на 22-м
+        progress = (i + 1) / SLIDE9_FRAMES
+        h = build_slide9_solo_html(progress, i)
+        slide9_htmls.append(h)
+    print(f"  HTML: slide9_voice — {SLIDE9_FRAMES} кадров анимации")
 
     print("\nРендерю PNG...")
     with sync_playwright() as p:
         browser = p.chromium.launch()
         ctx = browser.new_context(viewport={"width": 1080, "height": 1920}, device_scale_factor=2)
         page_pw = ctx.new_page()
-        for h in htmls:
+        # Обычные слайды
+        for name, h in htmls:
             page_pw.goto("file://" + h)
             page_pw.wait_for_load_state("networkidle")
             png = h.replace(".html", ".png")
             page_pw.screenshot(path=png, full_page=False)
             print(f"  PNG: {os.path.basename(png)}")
+        # Кадры слайда 9
+        for h in slide9_htmls:
+            page_pw.goto("file://" + h)
+            page_pw.wait_for_load_state("networkidle")
+            png = h.replace(".html", ".png")
+            page_pw.screenshot(path=png, full_page=False)
+        print(f"  PNG: slide9_voice_f00..f{SLIDE9_FRAMES-1:02d}")
         browser.close()
+
+    # Собираем slide9_voice.mp4 из 22 кадров (1 кадр/сек) → 22 сек видео
+    slide9_mp4 = os.path.join(DIR, "slide9_voice.mp4")
+    pattern = os.path.join(DIR, "slide9_voice_f%02d.png")
+    ffmpeg = os.path.expanduser("~/bin/ffmpeg")
+    import subprocess
+    cmd = [
+        ffmpeg, "-y",
+        "-framerate", "1",
+        "-i", pattern,
+        "-vf", "fps=30,format=yuv420p",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
+        slide9_mp4,
+    ]
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    if res.returncode != 0:
+        print("ffmpeg slide9 error:", res.stderr[-1500:])
+        raise SystemExit(1)
+    print(f"  MP4: slide9_voice.mp4 ({SLIDE9_FRAMES} сек анимации)")
+
     print("\nГотово.")
 
 

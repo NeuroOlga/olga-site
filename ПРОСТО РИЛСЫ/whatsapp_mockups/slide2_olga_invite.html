@@ -118,6 +118,22 @@ html, body {
   margin-left: 8px;
 }
 
+/* SOLO режим для слайда 9: голосовое сообщение по центру, увеличенное */
+.chat-area.solo {
+  justify-content: center;
+}
+.bubble.voice.solo {
+  min-width: 820px;
+  max-width: 92%;
+  padding: 28px 30px 36px;
+  gap: 22px;
+}
+.bubble.voice.solo .voice-play { width: 80px; height: 80px; font-size: 56px; }
+.bubble.voice.solo .voice-wave { height: 70px; gap: 5px; }
+.bubble.voice.solo .voice-time { font-size: 36px; }
+.bubble.voice.solo .voice-speed { font-size: 32px; padding: 10px 22px; }
+.bubble.voice.solo .voice-mic-btn { width: 80px; height: 80px; font-size: 40px; }
+
 /* панель реакций — над пузырём */
 .with-reactions { position: relative; }
 .reactions-bar {

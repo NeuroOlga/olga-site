@@ -18,8 +18,8 @@ SLIDES = [
     (os.path.join(M, "slide6_martin_threat.png"),        1.8),
     (os.path.join(M, "slide7_martin_command.png"),       1.8),
     (os.path.join(M, "slide8_olga_crowd.png"),           2.5),
-    (os.path.join(M, "slide9_voice.png"),                22.0),
-    (os.path.join(P, "slide10_real.png"),                2.5),
+    (os.path.join(M, "slide9_voice.mp4"),                22.0),
+    (os.path.join(P, "slide10_with_title.png"),          2.5),
 ]
 TOTAL = sum(d for _, d in SLIDES)
 print(f"Total reel duration: {TOTAL:.1f}s")
@@ -35,11 +35,14 @@ TMP_VIDEO = os.path.join(P, "_tmp_video.mp4")
 
 
 def build_video():
-    # 1) Создаём видео из изображений: каждое -loop 1 -t <длительность>
-    # Используем concat через filter_complex
+    # 1) Создаём видео из изображений и видео-файлов.
+    # Для PNG: -loop 1 -t <длительность>. Для MP4: просто -i (длительность уже в файле).
     inputs = []
     for path, dur in SLIDES:
-        inputs += ["-loop", "1", "-t", str(dur), "-i", path]
+        if path.lower().endswith(".mp4"):
+            inputs += ["-i", path]
+        else:
+            inputs += ["-loop", "1", "-t", str(dur), "-i", path]
 
     # filter_complex: scale & pad each image to 1080x1920, set fps, then concat
     filter_parts = []
