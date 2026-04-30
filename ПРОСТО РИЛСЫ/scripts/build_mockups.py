@@ -18,7 +18,7 @@ import sys
 from playwright.sync_api import sync_playwright
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _lib import load_config, parse_reel_arg, resolve_path, reel_path
+from _lib import load_config, parse_reel_arg, resolve_path, reel_path, get_audio_duration
 
 
 CSS = """
@@ -249,8 +249,24 @@ def main():
         for key, p in config.get("photos", {}).items()
     }
 
-    voice_total_sec = config.get("voice_slide9", {}).get("duration_sec", 22)
+    # Длительность голосового определяет длительность анимации s9: количество
+    # кадров и таймер в UI должны совпасть с реальным mp3 (после atempo).
+    # Если голос ещё не сгенерён — fallback на config.duration_sec.
+    voice_path = resolve_path(config, config["voice_slide9"]["output"])
+    voice_total_sec = get_audio_duration(voice_path)
+    if voice_total_sec is None:
+        voice_total_sec = config.get("voice_slide9", {}).get("duration_sec", 22)
+        print(f"  voice ещё не сгенерён → fallback на config: {voice_total_sec}s")
+    else:
+        print(f"  voice длится {voice_total_sec:.2f}s — синхронизирую анимацию")
+    voice_total_sec = max(1, round(voice_total_sec))
     thread = config["thread"]
+
+    # Обновим voice_dur в треде (то, что показано в UI как 0:XX над пузырём)
+    voice_dur_label = fmt_voice_time(voice_total_sec)
+    for m in thread:
+        if m.get("voice"):
+            m["voice_dur"] = voice_dur_label
 
     htmls = []
     for slide in config["slide_outputs"]:

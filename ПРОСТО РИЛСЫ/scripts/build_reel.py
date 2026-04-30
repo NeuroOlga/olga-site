@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _lib import load_config, parse_reel_arg, resolve_path, reel_path
+from _lib import load_config, parse_reel_arg, resolve_path, reel_path, get_audio_duration
 
 
 FFMPEG = os.path.expanduser("~/bin/ffmpeg")
@@ -23,9 +23,18 @@ def build_slide_paths(config: dict) -> list[tuple[str, float]]:
     Возвращает список (path, duration) — 10 слайдов в правильном порядке.
     Имена ассетов и мокапов жёстко завязаны на формат whatsapp_prank.
     """
-    durations = config["build"]["slide_durations"]
+    durations = dict(config["build"]["slide_durations"])
     assets = lambda name: str(reel_path(config, "assets", name))
     mockups = lambda name: str(reel_path(config, "mockups", name))
+
+    # Slide 9 длится РОВНО столько, сколько реальный голосовой файл (после atempo).
+    # Иначе после окончания голоса остаётся тишина перед финалом — пользователь
+    # это слышит как «затянулось». Если файла ещё нет — fallback на config.
+    voice_path = resolve_path(config, config["voice_slide9"]["output"])
+    voice_dur = get_audio_duration(voice_path)
+    if voice_dur is not None:
+        durations["slide9"] = round(voice_dur, 2)
+        print(f"  slide9 = voice длительность: {durations['slide9']}s")
 
     # Маппинг имени слайда → файл. mockups/<until_id>.png — берём из slide_outputs.
     so_by_until = {s["until_id"]: s["name"] for s in config["slide_outputs"]}

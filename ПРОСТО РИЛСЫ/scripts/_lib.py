@@ -12,9 +12,14 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
+
+
+FFMPEG = os.path.expanduser("~/bin/ffmpeg")
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -73,6 +78,28 @@ def resolve_path(config: dict, p: str) -> Path:
 def reel_path(config: dict, *parts: str) -> Path:
     """Сокращение для путей внутри папки рилса."""
     return Path(config["_reel_dir"]).joinpath(*parts)
+
+
+_DURATION_RE = re.compile(r"Duration:\s*(\d+):(\d+):(\d+\.?\d*)")
+
+
+def get_audio_duration(path: str | Path) -> float | None:
+    """Длительность аудио/видео в секундах. Парсит stderr `ffmpeg -i`.
+
+    Возвращает None если файл не существует или ffmpeg не сообщил Duration.
+    Используется build-скриптами для синхронизации длительности slide 9 с реальной
+    длиной голосового — иначе после atempo=2.0 голос короче, и в конце слайда
+    висит тишина перед финалом.
+    """
+    p = Path(path)
+    if not p.exists():
+        return None
+    res = subprocess.run([FFMPEG, "-i", str(p)], capture_output=True, text=True)
+    m = _DURATION_RE.search(res.stderr)
+    if not m:
+        return None
+    h, mi, s = m.groups()
+    return int(h) * 3600 + int(mi) * 60 + float(s)
 
 
 def parse_reel_arg(argv: list[str]) -> Path:

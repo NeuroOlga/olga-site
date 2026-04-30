@@ -1,0 +1,89 @@
+{
+  "name": "02_lysaya",
+  "format": "whatsapp_prank",
+  "title_slide_1": {
+    "lines": ["ПРАНК НАД", "МУЖЕМ"],
+    "emoji": "😱",
+    "source": "assets/slide1_real.png",
+    "output": "assets/slide1_with_title.png"
+  },
+  "title_slide_10": {
+    "source": "assets/slide10_real.png",
+    "output": "assets/slide10_with_title.png"
+  },
+  "chat": {
+    "recipient_name": "Толя ❤️",
+    "recipient_avatar_letter": "А"
+  },
+  "thread": [
+    {"id": "s2", "dir": "out",
+     "text": "Толик, смотри какая у меня новая стрижка!! 💇‍♀️✨",
+     "time": "20:24", "photo": "BALD_OLGA"},
+    {"id": "s3", "dir": "in", "text": "😳😳😳", "time": "20:29"},
+    {"id": "s4", "dir": "in",
+     "text": "Ты СЕРЬЁЗНО?? Это что, парик???",
+     "time": "20:30"},
+    {"id": "s5_chat", "dir": "out", "text": "", "time": "20:31", "photo": "SELFIE"},
+    {"id": "s6", "dir": "in",
+     "text": "Завтра же идём к стилисту, верни как было!!",
+     "time": "20:33"},
+    {"id": "s7", "dir": "in",
+     "text": "Это не смешно. Мы сегодня вечером с моими родителями ужинаем!",
+     "time": "20:34"},
+    {"id": "s8", "dir": "out",
+     "text": "Не переживай! 😊 Я и Тимуру заодно подстригла, теперь мы одинаковые!!",
+     "time": "20:34", "photo": "BALD_TIMUR"},
+    {"id": "s9", "dir": "in", "voice": true, "voice_dur": "0:22",
+     "voice_unread": true, "time": "20:35"}
+  ],
+  "photos": {
+    "BALD_OLGA": "assets/slide1_real.png",
+    "SELFIE": "assets/slide5_real.png",
+    "BALD_TIMUR": "assets/slide8_real.png"
+  },
+  "slide_outputs": [
+    {"name": "slide2_olga_haircut", "until_id": "s2"},
+    {"name": "slide3_tolya_shock", "until_id": "s3"},
+    {"name": "slide4_tolya_question", "until_id": "s4"},
+    {"name": "slide6_tolya_demand", "until_id": "s6"},
+    {"name": "slide7_tolya_dinner", "until_id": "s7"},
+    {"name": "slide8_olga_timur", "until_id": "s8"}
+  ],
+  "voice_slide9": {
+    "voice_id": "pNInz6obpgDQGcFmaJgB",
+    "voice_name": "Adam",
+    "text_with_tags": "[scoffs] Олечка... Олечка, ну ты чего наделала?! [breathes heavily] Ты... ты серьёзно сейчас, да? Ты что, реально подстриглась?! [angry] Зачем?! Зачем ты это сделала, ты в своём уме вообще?! Это же... это же ужас! [furious] И Тимур!! Ты ещё и Тимура?! [shouting] Зачем ребёнка-то трогать?! Ему два года, у него такие кудри были, эээ... [exhales sharply] Так, всё. Всё всё всё. Я еду домой. [urgent] Я через двадцать минут буду, и мы серьёзно поговорим, ясно? [demanding] Ты слышишь меня, Оля?!",
+    "text_plain": "Олечка... Олечка, ну ты чего наделала?! Ты... ты серьёзно сейчас, да? Ты что, реально подстриглась?! Зачем?! Зачем ты это сделала, ты в своём уме вообще?! Это же... это же ужас! И Тимур!! Ты ещё и Тимура?! Зачем ребёнка-то трогать?! Ему два года, у него такие кудри были, эээ... Так, всё. Всё всё всё. Я еду домой. Я через двадцать минут буду, и мы серьёзно поговорим, ясно? Ты слышишь меня, Оля?!",
+    "output": "voice/voice_slide9.mp3"
+  },
+  "image_generations": [
+    {
+      "name": "slide1",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "Vertical iPhone front-camera selfie of the same woman from the reference. Her head is COMPLETELY shaved bald — fully smooth scalp, no hair at all anywhere, freshly shaved skin still slightly pink at the scalp. She is running her hand over her smooth bald head, looking at the camera with a playful surprised expression — eyes wide, slight cheeky smile, eyebrows raised. Wearing a casual white t-shirt or fluffy white bathrobe. Background: a modern bathroom with a large mirror behind her, soft natural daylight, white tiles. Realistic iPhone selfie with subtle front-camera lens distortion, raw skin texture, no filter, no makeup smoothing. Vertical 9:16 framing.",
+      "output": "assets/slide1_real.png"
+    },
+    {
+      "name": "slide5",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "Vertical iPhone front-camera selfie of the same woman from the reference, taken inside her bathroom. Her head is COMPLETELY shaved bald — fully smooth scalp, no hair, freshly shaved. She is grinning proudly at the camera, head tilted slightly to one side, showing off her bald head with confidence and amusement, eyes sparkling. Wearing a fluffy white bathrobe loosely tied. Background: bright modern bathroom with mirror, white tiles, soft natural lighting. Realistic confident iPhone selfie with slight front-camera lens distortion, raw skin texture. Vertical 9:16 framing.",
+      "output": "assets/slide5_real.png"
+    },
+    {
+      "name": "slide8",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/timur/IMG_0709.jpg"],
+      "prompt": "Vertical iPhone amateur photo of the same toddler boy from the reference (about 2-3 years old, fair skin, big grey-blue eyes, round chubby cheeks). His head is now COMPLETELY shaved bald — fully smooth scalp, no hair at all, freshly shaved with skin slightly pink. He is sitting on a soft beige couch looking up at the camera with a curious slightly confused neutral expression, lips parted, eyes big. Wearing a casual cotton t-shirt. Soft natural living room lighting from a window, blurred home interior in background. Realistic amateur phone snapshot, slight motion blur, raw and unposed, no filter. Vertical 9:16 framing.",
+      "output": "assets/slide8_real.png"
+    },
+    {
+      "name": "slide10",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "Vertical iPhone front-camera selfie of the same woman from the reference. Her head is COMPLETELY shaved bald — fully smooth scalp, no hair. She is winking at the camera with a confident playful smug smile, one eyebrow raised. Wearing a casual white t-shirt or robe. Soft-focus modern bathroom background, white tiles, mirror. Natural soft lighting. Realistic confident casual iPhone selfie with slight lens distortion, raw skin texture. Vertical 9:16.",
+      "output": "assets/slide10_real.png"
+    }
+  ]
+}
