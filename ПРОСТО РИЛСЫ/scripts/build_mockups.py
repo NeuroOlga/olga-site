@@ -241,6 +241,14 @@ def main():
     mockups_dir.mkdir(parents=True, exist_ok=True)
     build_dir.mkdir(parents=True, exist_ok=True)
 
+    # Удаляем старые slide9_voice_f*.png — иначе если новый рендер короче
+    # предыдущего, ffmpeg подхватит лишние кадры и slide9.mp4 будет длиннее
+    # реального голосового. То же для HTML в _build.
+    for old in mockups_dir.glob("slide9_voice_f*.png"):
+        old.unlink()
+    for old in build_dir.glob("slide9_voice_f*.html"):
+        old.unlink()
+
     css = build_css(config.get("safe_zone", {}), config["chat"].get("recipient_avatar_color", "#6b7c85"))
     header = build_chat_header(config["chat"])
 
