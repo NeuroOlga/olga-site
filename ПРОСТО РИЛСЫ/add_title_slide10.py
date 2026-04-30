@@ -15,7 +15,7 @@ P = "/Users/frolovaolga/Library/Mobile Documents/com~apple~CloudDocs/Olga Frolov
 # --- Параметры надписи ---
 LINE1 = "ПРАНК"
 LINE2 = "0 ИЗ 10"
-LINE3 = "(Не повторять!)"
+LINE3 = "(Не рекомендую)"
 
 # Размеры подбираются под фактическое разрешение картинки в main().
 BASE_W = 1080
