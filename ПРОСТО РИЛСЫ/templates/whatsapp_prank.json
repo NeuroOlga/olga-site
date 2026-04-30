@@ -1,0 +1,68 @@
+{
+  "format": "whatsapp_prank",
+  "description": "Шаблон 10-слайдного WhatsApp-пранка. Дефолты применяются ко всем рилсам этого формата; конкретный config.json переопределяет нужные поля.",
+  "chat": {
+    "recipient_status": "был(а) недавно",
+    "recipient_avatar_color": "#6b7c85"
+  },
+  "title_slide_1": {
+    "subtitle": "(Не повторять!)",
+    "y_frac": 0.55,
+    "title_size_base": 72,
+    "small_size_base": 50,
+    "emoji_size_base": 90
+  },
+  "title_slide_10": {
+    "lines": ["ПРАНК", "0 ИЗ 10"],
+    "subtitle": "(Не рекомендую)",
+    "y_frac": 0.55,
+    "title_size_base": 72,
+    "small_size_base": 50
+  },
+  "slide_outputs": [
+    {"name": "slide2", "until_id": "s2"},
+    {"name": "slide3", "until_id": "s3"},
+    {"name": "slide4", "until_id": "s4"},
+    {"name": "slide6", "until_id": "s6"},
+    {"name": "slide7", "until_id": "s7"},
+    {"name": "slide8", "until_id": "s8"}
+  ],
+  "voice_slide9": {
+    "model": "eleven_v3",
+    "settings": {
+      "stability": 0.18,
+      "similarity_boost": 0.75,
+      "style": 0.92,
+      "use_speaker_boost": true,
+      "speed": 1.0
+    },
+    "atempo": 2.0,
+    "duration_sec": 22
+  },
+  "build": {
+    "slide_durations": {
+      "slide1": 1.5,
+      "slide2": 2.0,
+      "slide3": 1.0,
+      "slide4": 1.8,
+      "slide5": 1.8,
+      "slide6": 1.8,
+      "slide7": 1.8,
+      "slide8": 2.5,
+      "slide9": 22.0,
+      "slide10": 2.5
+    },
+    "music": "shared/music/background_music.mp3",
+    "music_duck_volume": 0.30,
+    "music_normal_volume": 0.85,
+    "voice_volume": 1.4,
+    "output": "final.mp4",
+    "fps": 30,
+    "resolution": [1080, 1920]
+  },
+  "safe_zone": {
+    "top": 360,
+    "size": [1080, 1170],
+    "scale": 0.82
+  }
+}

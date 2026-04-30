@@ -1,0 +1,88 @@
+{
+  "name": "01_banya",
+  "format": "whatsapp_prank",
+  "title_slide_1": {
+    "lines": ["ПРАНК НАД", "ХОЗЯИНОМ КВАРТИРЫ"],
+    "emoji": "😱",
+    "source": "assets/slide1_real.png",
+    "output": "assets/slide1_with_title.png"
+  },
+  "title_slide_10": {
+    "source": "assets/slide10_real.png",
+    "output": "assets/slide10_with_title.png"
+  },
+  "chat": {
+    "recipient_name": "Мартин Хозяин квартиры",
+    "recipient_avatar_letter": "М"
+  },
+  "thread": [
+    {"id": "s2", "dir": "out",
+     "text": "Мартин, привет!! 🌿 Мы тут с девочками русскую баню у вас сделали, заходи попариться!!",
+     "time": "20:24", "photo": "BANYA"},
+    {"id": "s3", "dir": "in", "text": "😳😳😳", "time": "20:29"},
+    {"id": "s4", "dir": "in",
+     "text": "Какую ещё баню?? Это ВАННАЯ КОМНАТА",
+     "time": "20:30"},
+    {"id": "s5_chat", "dir": "out", "text": "", "time": "20:31", "photo": "SELFIE"},
+    {"id": "s6", "dir": "in",
+     "text": "Завтра вы выезжаете из квартиры",
+     "time": "20:33"},
+    {"id": "s7", "dir": "in",
+     "text": "Немедленно всё уберите и выключите пар, я еду",
+     "time": "20:34"},
+    {"id": "s8", "dir": "out",
+     "text": "Хорошо, как скажешь 🙃 Мы тут ещё друзей позвали, им тоже понравилось!",
+     "time": "20:34", "photo": "CROWD"},
+    {"id": "s9", "dir": "in", "voice": true, "voice_dur": "0:22",
+     "voice_unread": true, "time": "20:35"}
+  ],
+  "photos": {
+    "BANYA": "assets/slide1_real.png",
+    "SELFIE": "assets/slide5_real.png",
+    "CROWD": "assets/slide8_real.png"
+  },
+  "slide_outputs": [
+    {"name": "slide2_olga_invite", "until_id": "s2"},
+    {"name": "slide3_martin_shock", "until_id": "s3"},
+    {"name": "slide4_martin_question", "until_id": "s4"},
+    {"name": "slide6_martin_threat", "until_id": "s6"},
+    {"name": "slide7_martin_command", "until_id": "s7"},
+    {"name": "slide8_olga_crowd", "until_id": "s8"}
+  ],
+  "voice_slide9": {
+    "voice_id": "pqHfZKP75CvOlQylNhV4",
+    "voice_name": "Bill",
+    "text_with_tags": "[scoffs] Ольга? Ольга, эээ... [breathes heavily] ну ты-ы серьёзно вообще?! [angry] Эээ, какая баня?! Какая баня в моей квартире?! Это, ммм... это ванная! Понимаешь? Просто ва́нная! [furious] Я уже... ну блин, я уже соседям снизу плачу за потоп, э-э, второй раз! [exhales sharply] Так, всё. Всё, всё, всё. Я в машине уже, я еду. [urgent] Двадцать минут — и я там, ясно? [threatening] И если там... ммм... если там кто-то ещё останется — [shouting] я тебя предупреждаю, я полицию вызываю, без шуток! [demanding] Ты слышишь меня вообще, Ольга?!",
+    "text_plain": "Ольга? Ольга, эээ... ну ты-ы серьёзно вообще?! Эээ, какая баня?! Какая баня в моей квартире?! Это, ммм... это ванная! Понимаешь? Просто ванная! Я уже... ну блин, я уже соседям снизу плачу за потоп, э-э, второй раз! Так, всё. Всё, всё, всё. Я в машине уже, я еду. Двадцать минут — и я там, ясно? И если там... ммм... если там кто-то ещё останется — я тебя предупреждаю, я полицию вызываю, без шуток! Ты слышишь меня вообще, Ольга?!",
+    "output": "voice/voice_slide9.mp3"
+  },
+  "image_generations": [
+    {
+      "name": "slide1",
+      "type": "image_to_image",
+      "ref_images": ["refs/real_bathroom.jpg", "shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "Vertical iPhone amateur photo. The same woman from the second reference image, standing inside the actual bathroom from the first reference image. She is wrapped in a white bath towel, holding a russian banya broom (oak and birch leaves bundle on a wooden handle) raised over her shoulder. Her face is flushed pink from heat, slightly damp hair. Behind her: thick white steam, the bathroom from the reference. Realistic candid amateur snapshot, slight motion blur, raw skin texture. Vertical 9:16 framing. Buenos Aires apartment bathroom from the reference image — keep its layout, tiles, fixtures unchanged.",
+      "output": "assets/slide1_real.png"
+    },
+    {
+      "name": "slide5",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "A vertical iPhone front-camera selfie of the same girl from the reference, taken inside a steamy modern bathroom. Her face is heavily flushed red from heat and steam, sweat droplets visible on her temples and forehead, wet hair strands sticking to her forehead. Long dark hair partially down. She is wrapped in a white bath towel, holding a russian banya broom (oak and birch leaves) raised to her shoulder in one hand, smartphone in the other hand for the selfie. Behind her: foggy bathroom mirror, white subway tiles, thick steam. She is smiling proudly at the camera. Realistic iPhone selfie with slight front-camera lens distortion, vertical 9:16 framing, raw skin texture.",
+      "output": "assets/slide5_real.png"
+    },
+    {
+      "name": "slide8",
+      "type": "text_to_image",
+      "prompt": "A vertical iPhone amateur candid photo, absurd surreal scene. Five Latino Argentinian people (3 men, 2 women, ages 25-50, tan skin, dark hair) crammed inside a small modern apartment bathroom. ALL of them wearing oversized Russian fur ushanka hats (winter fur hats with ear flaps). Each holding a russian banya broom (oak and birch leaves on a wooden handle). All wrapped in white bath towels. Faces flushed red, sweating heavily, looking confused but trying to enjoy the experience. Thick white steam everywhere, foggy mirror, white subway tiles, modern gray fixtures. The bathroom is way too small for 5 people — one sitting on the toilet lid, others squeezed against walls. Realistic chaotic phone snapshot, raw and a bit messy. Vertical 9:16 framing.",
+      "output": "assets/slide8_real.png"
+    },
+    {
+      "name": "slide10",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "A vertical iPhone front-camera selfie of the same girl from the reference. She is winking at the camera with a confident smug smile. Russian banya broom (oak and birch leaves) resting casually on her shoulder. Wrapped in a white bath towel. Long dark hair flowing down past her shoulders. Cheeks slightly pink. Soft-focus background of a steamy modern bathroom with white subway tiles. Natural soft lighting. Realistic confident casual iPhone selfie, vertical 9:16.",
+      "output": "assets/slide10_real.png"
+    }
+  ]
+}
