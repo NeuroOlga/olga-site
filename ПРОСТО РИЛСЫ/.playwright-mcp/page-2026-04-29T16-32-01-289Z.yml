@@ -1,0 +1,24 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]: 14:23
+    - generic [ref=e4]:
+      - generic [ref=e5]: •••
+      - generic [ref=e6]: 📶
+  - generic [ref=e8]:
+    - generic [ref=e9]: ‹
+    - generic [ref=e10]: M
+    - generic [ref=e11]:
+      - generic [ref=e12]: Мартин Хозяин квартиры
+      - generic [ref=e13]: в сети
+    - generic [ref=e14]:
+      - generic [ref=e15]: 📹
+      - generic [ref=e16]: 📞
+  - generic [ref=e17]:
+    - generic [ref=e18]: сегодня
+    - generic [ref=e19]:
+      - text: Какую ещё баню?? Это ВАННАЯ КОМНАТА
+      - generic [ref=e20]: 14:23
+  - generic [ref=e21]:
+    - generic [ref=e22]: +
+    - generic [ref=e23]: Сообщение
+    - generic [ref=e24]: 🎤
