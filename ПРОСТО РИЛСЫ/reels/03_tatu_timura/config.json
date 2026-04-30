@@ -1,0 +1,90 @@
+{
+  "name": "03_tatu_timura",
+  "format": "whatsapp_prank",
+  "title_slide_1": {
+    "lines": ["ПРАНК НАД", "МАМОЙ"],
+    "emoji": "😱",
+    "source": "assets/slide1_real.png",
+    "output": "assets/slide1_with_title.png"
+  },
+  "title_slide_10": {
+    "source": "assets/slide10_real.png",
+    "output": "assets/slide10_with_title.png"
+  },
+  "chat": {
+    "recipient_name": "Мама ❤️",
+    "recipient_avatar_letter": "М"
+  },
+  "thread": [
+    {"id": "s2", "dir": "out",
+     "text": "Мам, смотри! Тимуру тату сделали, он давно просил! 💉🌹",
+     "time": "19:14", "photo": "TIMUR_TATTOO"},
+    {"id": "s3", "dir": "in", "text": "😱😱😱", "time": "19:18"},
+    {"id": "s4", "dir": "in",
+     "text": "Ты СОВСЕМ С УМА СОШЛА?? Ему ДВА ГОДА!!!",
+     "time": "19:19"},
+    {"id": "s5_chat", "dir": "out", "text": "", "time": "19:20", "photo": "SELFIE"},
+    {"id": "s6", "dir": "in",
+     "text": "Я завтра прилетаю, всё, хватит!",
+     "time": "19:21"},
+    {"id": "s7", "dir": "in",
+     "text": "Немедленно сведите, я знаю врача в Москве, он поможет!!",
+     "time": "19:22"},
+    {"id": "s8", "dir": "out",
+     "text": "Мам, ну посмотри какая красота 😍 Мы себе с Толей такие же набили, теперь как одна семья!",
+     "time": "19:22", "photo": "FAMILY_TATTOO"},
+    {"id": "s9", "dir": "in", "voice": true, "voice_dur": "0:18",
+     "voice_unread": true, "time": "19:23"}
+  ],
+  "photos": {
+    "TIMUR_TATTOO": "assets/slide1_real.png",
+    "SELFIE": "assets/slide5_real.png",
+    "FAMILY_TATTOO": "assets/slide8_real.png"
+  },
+  "slide_outputs": [
+    {"name": "slide2_olga_announce", "until_id": "s2"},
+    {"name": "slide3_mama_shock", "until_id": "s3"},
+    {"name": "slide4_mama_question", "until_id": "s4"},
+    {"name": "slide6_mama_threat", "until_id": "s6"},
+    {"name": "slide7_mama_doctor", "until_id": "s7"},
+    {"name": "slide8_olga_family", "until_id": "s8"}
+  ],
+  "voice_slide9": {
+    "voice_id": "EXAVITQu4vr4xnSDxMaL",
+    "voice_name": "Sarah",
+    "atempo": 1.3,
+    "text_with_tags": "[crying] Олечка... Олечка, ты что наделала?! [shouting] Ты совсем СОШЛА с ума, да?! Ребёнку! Ему два годика всего! [breathes heavily] Это же... это же на всю жизнь! Ты понимаешь?! [crying] Бо-о-оже мой... [angry] И ты ещё и Толя?! Вы что там, секта какая?! [furious] Я завтра вылетаю, ясно?! [demanding] Никуда не уходите из квартиры! [crying] Господи, что я скажу папе...",
+    "text_plain": "Олечка... Олечка, ты что наделала?! Ты совсем сошла с ума, да?! Ребёнку! Ему два годика всего! Это же... это же на всю жизнь! Ты понимаешь?! Боже мой... И ты ещё и Толя?! Вы что там, секта какая?! Я завтра вылетаю, ясно?! Никуда не уходите из квартиры! Господи, что я скажу папе...",
+    "output": "voice/voice_slide9.mp3"
+  },
+  "image_generations": [
+    {
+      "name": "slide1",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/timur/IMG_0709.jpg"],
+      "prompt": "Vertical iPhone amateur candid photo of the same young child from the reference (golden-reddish curly hair, big grey-blue eyes, round cheeks, fair skin). His entire LEFT FOREARM is covered with a large colorful temporary kids play sticker decoration — old-school sticker design with red roses, a butterfly, and small black stars in playful black-and-red colors. It is clearly a temporary water-transfer kids sticker (the kind sold in toy shops for fun). He is sitting on a beige couch, holding up his decorated arm proudly toward the camera with an innocent curious expression, looking directly at the lens. Wearing a casual short-sleeve white t-shirt. Soft natural living room daylight from a window. Realistic candid amateur phone snapshot, slightly off-center, raw and unposed, no filter. Vertical 9:16 framing.",
+      "output": "assets/slide1_real.png"
+    },
+    {
+      "name": "slide5",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg", "shared/face_refs/timur/IMG_0709.jpg"],
+      "prompt": "Vertical iPhone front-camera selfie of the same woman (Olga — long dark hair, light blue-grey eyes, glamorous look) and the same toddler boy (Timur — about 2-3 years old, golden-reddish curly hair, big grey-blue eyes, round cheeks) from the references. Olga is holding Timur close, cheek to cheek, both smiling at the camera. They both raise their LEFT FOREARMS toward the camera, each with a matching large old-school style tattoo (red roses, a butterfly, small black stars in classic black-and-red ink) covering the whole forearm. Olga grinning proudly. Timur looking innocently curious. Background: bright modern Buenos Aires apartment living room. Soft natural daylight. Realistic confident iPhone selfie with slight front-camera lens distortion, raw skin texture. Vertical 9:16.",
+      "output": "assets/slide5_real.png"
+    },
+    {
+      "name": "slide8",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg", "shared/face_refs/anatoliy/IMG_1982.JPG", "shared/face_refs/timur/IMG_0709.jpg"],
+      "prompt": "Vertical iPhone family selfie of three people from the references — Olga (long dark hair, light blue-grey eyes, glamorous), her husband Anatoliy (completely shaved bald head, full reddish-brown beard and moustache, green-grey eyes, athletic build), and their toddler son Timur (about 2-3 years old, golden-reddish curly hair, fair skin, round chubby cheeks). All three squeezed together facing the camera, all proudly raising their LEFT FOREARMS toward the lens, showing MATCHING large old-school style tattoos (red roses, butterfly, small black stars in classic black-and-red ink) covering each forearm from wrist to elbow. Olga grinning, Anatoliy with a calm friendly half-smile, Timur looking innocently confused. All wearing casual short-sleeve t-shirts. Background: modern Buenos Aires apartment living room with a couch and a window with daylight. Realistic candid family iPhone selfie, slight motion, raw skin texture, no filter. Vertical 9:16.",
+      "output": "assets/slide8_real.png"
+    },
+    {
+      "name": "slide10",
+      "type": "image_to_image",
+      "ref_images": ["shared/face_refs/olga/IMG_1142.jpg"],
+      "prompt": "Vertical iPhone front-camera selfie of the same woman from the reference — Olga, long dark hair flowing down, glamorous look. She is winking at the camera with a confident playful smug smile, one eyebrow slightly raised. She holds up her LEFT FOREARM toward the camera, showing off her large old-school style tattoo (red roses, butterfly, small black stars in classic black-and-red ink) covering the whole forearm. Wearing a casual fitted t-shirt. Soft modern apartment background out of focus. Natural soft warm lighting. Realistic confident casual iPhone selfie with slight front-camera lens distortion. Vertical 9:16.",
+      "output": "assets/slide10_real.png"
+    }
+  ]
+}
