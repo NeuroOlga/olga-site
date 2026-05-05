@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бриф на контент · Olga Frolova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f1ea;
+    --bg-deep:#ebe5da;
+    --card:#ffffff;
+    --ink:#1c1916;
+    --muted:#7a7268;
+    --line:#e6dfd2;
+    --line-soft:#efe9dd;
+    --accent:#b54a25;
+    --accent-deep:#8a3818;
+    --accent-soft:#fbe9df;
+    --soft:#f0ebe0;
+    --shadow:0 1px 2px rgba(28,25,22,.04), 0 8px 28px rgba(28,25,22,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.55;font-size:15px}
+  .serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+
+  /* Progress bar */
+  .progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:100}
+  .progress-bar{height:100%;width:0%;background:var(--accent);
+    transition:width .35s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(181,74,37,.35)}
+
+  .wrap{max-width:780px;margin:0 auto;padding:48px 20px 120px}
+
+  /* Hero */
+  .hero{margin-bottom:56px;position:relative}
+  .hero::before{content:"";position:absolute;top:-40px;right:-30px;width:180px;height:180px;
+    background:radial-gradient(circle,var(--accent-soft) 0%,transparent 70%);z-index:-1;border-radius:50%;opacity:.7}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent);display:inline-block}
+  .hero h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:64px;line-height:1.02;
+    letter-spacing:-.02em;margin:0 0 24px;font-variation-settings:"opsz" 144}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+  .hero .lead{font-size:17px;color:var(--muted);max-width:560px;margin:0 0 28px;line-height:1.6}
+  .hero .lead strong{color:var(--ink);font-weight:600}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:24px;padding-top:24px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--muted)}
+  .hero-meta div{display:flex;flex-direction:column;gap:2px}
+  .hero-meta .num{font-family:'Fraunces',serif;font-size:22px;color:var(--ink);font-weight:500;letter-spacing:-.01em}
+  @media(max-width:560px){
+    .hero h1{font-size:44px}
+    .hero .lead{font-size:15px}
+  }
+
+  /* Note */
+  .note{font-size:13.5px;color:var(--ink);background:var(--accent-soft);
+    padding:16px 20px;border-radius:14px;margin-bottom:40px;display:flex;gap:12px;align-items:flex-start;
+    border:1px solid rgba(181,74,37,.15)}
+  .note-icon{font-size:18px;flex-shrink:0;line-height:1}
+
+  /* Cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:36px 32px;margin-bottom:20px;box-shadow:var(--shadow);
+    position:relative;transition:transform .25s,box-shadow .25s}
+  .card:hover{box-shadow:0 1px 2px rgba(28,25,22,.05), 0 14px 40px rgba(28,25,22,.08)}
+  .card-head{display:flex;align-items:flex-start;gap:18px;margin-bottom:28px;padding-bottom:18px;
+    border-bottom:1px dashed var(--line)}
+  .card-num{font-family:'Fraunces',serif;font-style:italic;font-size:42px;font-weight:500;
+    color:var(--accent);line-height:.85;letter-spacing:-.02em;flex-shrink:0;
+    font-variation-settings:"opsz" 144}
+  .card-title{flex:1;padding-top:4px}
+  .card-title .kicker{font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;margin-bottom:6px}
+  .card-title h3{font-family:'Fraunces',serif;font-weight:500;font-size:26px;margin:0;
+    letter-spacing:-.01em;line-height:1.15;font-variation-settings:"opsz" 60}
+  @media(max-width:560px){
+    .card{padding:28px 22px}
+    .card-num{font-size:34px}
+    .card-title h3{font-size:22px}
+  }
+
+  /* Fields */
+  .field{margin-bottom:20px}
+  .field:last-child{margin-bottom:0}
+  label{display:block;font-size:13.5px;font-weight:600;margin-bottom:8px;color:var(--ink);letter-spacing:-.005em}
+  label .hint{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:8px;letter-spacing:0}
+  input[type="text"],input[type="email"],input[type="url"],input[type="date"],input[type="number"],textarea,select{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fdfcf9;
+    font:inherit;color:var(--ink);transition:all .2s;font-size:14.5px}
+  input:hover,textarea:hover,select:hover{border-color:#d4cab9;background:#fff}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);
+    background:#fff;box-shadow:0 0 0 3px rgba(181,74,37,.08)}
+  textarea{resize:vertical;min-height:80px;line-height:1.55}
+  select{cursor:pointer;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%237a7268' d='M6 8L0 0h12z'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+
+  /* Checkboxes as pills */
+  .checks{display:flex;flex-wrap:wrap;gap:8px}
+  .check{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid var(--line);
+    border-radius:999px;cursor:pointer;font-size:13.5px;background:#fdfcf9;user-select:none;
+    transition:all .2s;font-weight:500}
+  .check:hover{border-color:var(--accent);color:var(--accent);background:#fff}
+  .check input{position:absolute;opacity:0;width:0;height:0}
+  .check span{display:inline-flex;align-items:center;gap:7px}
+  .check span::before{content:"";width:14px;height:14px;border-radius:50%;
+    border:1.5px solid var(--line);transition:all .2s;flex-shrink:0;background:#fff}
+  .check:hover span::before{border-color:var(--accent)}
+  .check:has(input:checked){background:var(--accent);border-color:var(--accent);color:#fff}
+  .check:has(input:checked) span::before{background:#fff;border-color:#fff;
+    box-shadow:inset 0 0 0 3px var(--accent)}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.row{grid-template-columns:1fr;gap:12px}}
+
+  .req::after{content:" ●";color:var(--accent);font-size:8px;vertical-align:top;margin-left:2px}
+
+  /* Actions sticky bar */
+  .actions{position:sticky;bottom:20px;background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(150%) blur(20px);-webkit-backdrop-filter:saturate(150%) blur(20px);
+    border:1px solid var(--line);border-radius:18px;padding:14px;
+    display:flex;flex-wrap:wrap;gap:10px;
+    box-shadow:0 4px 12px rgba(28,25,22,.06), 0 20px 60px rgba(28,25,22,.12);
+    margin-top:40px;z-index:50}
+  button{padding:13px 20px;border-radius:11px;border:1px solid var(--ink);background:var(--ink);
+    color:#fff;font:inherit;font-weight:600;cursor:pointer;transition:all .2s;flex:1;min-width:130px;
+    font-size:14px;letter-spacing:-.005em}
+  button:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+  button.secondary{background:#fff;color:var(--ink);border-color:var(--line)}
+  button.secondary:hover{background:var(--soft);border-color:var(--ink);color:var(--ink);transform:translateY(-1px)}
+
+  /* Toast */
+  .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;
+    opacity:0;transition:all .3s;pointer-events:none;z-index:200;font-weight:500;
+    box-shadow:0 10px 40px rgba(0,0,0,.2)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* Footer */
+  .foot{text-align:center;margin-top:60px;padding-top:32px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--muted);letter-spacing:.05em}
+  .foot .sig{font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:var(--ink);
+    font-weight:400;margin-bottom:6px;letter-spacing:-.005em}
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Olga Frolova · Buenos Aires</div>
+  <h1 class="serif">Бриф <em>на&nbsp;контент</em></h1>
+  <p class="lead">Заполните форму — на основе ваших ответов я подготовлю <strong>предложение, оценку и план работ</strong>. Это занимает 10–15 минут и помогает нам обоим сэкономить время.</p>
+  <div class="hero-meta">
+    <div><span class="num">12</span><span>разделов</span></div>
+    <div><span class="num">10–15</span><span>минут на&nbsp;заполнение</span></div>
+    <div><span class="num">24ч</span><span>срок ответа</span></div>
+  </div>
+</header>
+
+<div class="note">
+  <span class="note-icon">✦</span>
+  <span>Логотипы, гайдлайны, исходники и&nbsp;референсы — пришлите отдельным сообщением в&nbsp;Telegram / WhatsApp / на&nbsp;почту, или вставьте ссылку на&nbsp;Google&nbsp;Drive в&nbsp;разделе&nbsp;7.</span>
+</div>
+
+<!-- 1 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">01</div>
+    <div class="card-title"><div class="kicker">Раздел 01</div><h3 class="serif">О заказчике</h3></div>
+  </div>
+  <div class="field"><label class="req">Название бренда / проекта / личный бренд</label><input type="text" name="brand_name" required></div>
+  <div class="field"><label class="req">Сфера деятельности <span class="hint">что продаёте, какой бизнес, экспертиза</span></label>
+    <textarea name="brand_about" required></textarea></div>
+  <div class="row">
+    <div class="field"><label>Сайт</label><input type="url" name="brand_site" placeholder="https://..."></div>
+    <div class="field"><label>Instagram / TikTok / YouTube</label><input type="text" name="brand_social" placeholder="@handle"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label class="req">Контактное лицо</label><input type="text" name="contact_name" placeholder="Имя" required></div>
+    <div class="field"><label class="req">Telegram / WhatsApp / Email</label><input type="text" name="contact_link" required></div>
+  </div>
+  <div class="field"><label>Город, часовой пояс <span class="hint">для созвонов</span></label><input type="text" name="brand_geo"></div>
+</section>
+
+<!-- 2 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">02</div>
+    <div class="card-title"><div class="kicker">Раздел 02</div><h3 class="serif">Что нужно произвести</h3></div>
+  </div>
+  <div class="field"><label class="req">Тип контента</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Reels / TikTok / Shorts"><span>Reels / TikTok / Shorts</span></label>
+      <label class="check"><input type="checkbox" value="Длинные видео YouTube"><span>YouTube (длинные)</span></label>
+      <label class="check"><input type="checkbox" value="Карусели Instagram"><span>Карусели</span></label>
+      <label class="check"><input type="checkbox" value="Статичные посты / обложки"><span>Посты / обложки</span></label>
+      <label class="check"><input type="checkbox" value="Сторис"><span>Сторис</span></label>
+      <label class="check"><input type="checkbox" value="AI-фото / AI-серия"><span>AI-фото</span></label>
+      <label class="check"><input type="checkbox" value="Сценарии"><span>Сценарии</span></label>
+      <label class="check"><input type="checkbox" value="Монтаж готового материала"><span>Только монтаж</span></label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Кол-во рилсов / шортсов</label><input type="number" name="qty_reels" min="0"></div>
+    <div class="field"><label>Кол-во каруселей / постов</label><input type="number" name="qty_posts" min="0"></div>
+  </div>
+  <div class="field"><label>Площадки публикации</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Instagram"><span>Instagram</span></label>
+      <label class="check"><input type="checkbox" value="TikTok"><span>TikTok</span></label>
+      <label class="check"><input type="checkbox" value="YouTube Shorts"><span>YouTube Shorts</span></label>
+      <label class="check"><input type="checkbox" value="YouTube"><span>YouTube</span></label>
+      <label class="check"><input type="checkbox" value="Telegram"><span>Telegram</span></label>
+      <label class="check"><input type="checkbox" value="VK / Дзен"><span>VK / Дзен</span></label>
+    </div>
+  </div>
+  <div class="field"><label class="req">Формат сотрудничества</label>
+    <select name="frequency" required>
+      <option value="">— выберите</option>
+      <option>Разовый проект</option>
+      <option>Тестовый месяц (1 контент-план)</option>
+      <option>Ежемесячное ведение</option>
+      <option>Долгосрочно (3 мес. и больше)</option>
+    </select></div>
+</section>
+
+<!-- 3 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">03</div>
+    <div class="card-title"><div class="kicker">Раздел 03</div><h3 class="serif">Цель контента</h3></div>
+  </div>
+  <div class="field"><label class="req">Что должен делать контент</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Привлекать новых подписчиков"><span>Новые подписчики</span></label>
+      <label class="check"><input type="checkbox" value="Прогревать аудиторию"><span>Прогрев</span></label>
+      <label class="check"><input type="checkbox" value="Продавать конкретный продукт"><span>Продажи продукта</span></label>
+      <label class="check"><input type="checkbox" value="Запись на услугу / консультацию"><span>Заявки на услугу</span></label>
+      <label class="check"><input type="checkbox" value="Личный бренд / экспертность"><span>Личный бренд</span></label>
+      <label class="check"><input type="checkbox" value="Узнаваемость бренда"><span>Узнаваемость</span></label>
+      <label class="check"><input type="checkbox" value="Запуск продукта"><span>Запуск продукта</span></label>
+    </div>
+  </div>
+  <div class="field"><label>Что считаем успехом <span class="hint">просмотры, заявки, подписки, сохранения — на что смотрим через месяц</span></label>
+    <input type="text" name="kpi"></div>
+  <div class="field"><label>Что продаёте через контент <span class="hint">конкретный продукт / услуга / курс / запись</span></label>
+    <textarea name="product"></textarea></div>
+</section>
+
+<!-- 4 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">04</div>
+    <div class="card-title"><div class="kicker">Раздел 04</div><h3 class="serif">Аудитория</h3></div>
+  </div>
+  <div class="field"><label class="req">Кто ваш клиент <span class="hint">пол, возраст, гео, образ жизни, доход, чем занимается</span></label>
+    <textarea name="audience_who" required></textarea></div>
+  <div class="field"><label>Какую боль / задачу решает ваш продукт</label>
+    <textarea name="audience_pain"></textarea></div>
+  <div class="field"><label>На каких блогеров / экспертов / бренды она уже подписана</label>
+    <textarea name="audience_refs"></textarea></div>
+</section>
+
+<!-- 5 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">05</div>
+    <div class="card-title"><div class="kicker">Раздел 05</div><h3 class="serif">Темы и сообщения</h3></div>
+  </div>
+  <div class="field"><label class="req">Темы, которые точно нужно раскрыть <span class="hint">список 5–15 тем / болей / вопросов клиента</span></label>
+    <textarea name="topics" required style="min-height:120px"></textarea></div>
+  <div class="field"><label>Ключевые сообщения / смыслы, которые должны звучать в каждом ролике</label>
+    <textarea name="key_messages"></textarea></div>
+  <div class="field"><label>Темы / формулировки, которых ИЗБЕГАТЬ</label>
+    <textarea name="dont_topics" placeholder="политика, обещания результата, конкретные имена..."></textarea></div>
+</section>
+
+<!-- 6 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">06</div>
+    <div class="card-title"><div class="kicker">Раздел 06</div><h3 class="serif">Стиль и Tone of voice</h3></div>
+  </div>
+  <div class="field"><label>Бренд звучит как</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Дружелюбно / по-свойски"><span>Дружелюбно</span></label>
+      <label class="check"><input type="checkbox" value="Экспертно / уверенно"><span>Экспертно</span></label>
+      <label class="check"><input type="checkbox" value="С юмором"><span>С юмором</span></label>
+      <label class="check"><input type="checkbox" value="Минималистично / спокойно"><span>Минималистично</span></label>
+      <label class="check"><input type="checkbox" value="Премиально / сдержанно"><span>Премиально</span></label>
+      <label class="check"><input type="checkbox" value="Эмоционально / искренне"><span>Эмоционально</span></label>
+      <label class="check"><input type="checkbox" value="Провокационно"><span>Провокационно</span></label>
+    </div>
+  </div>
+  <div class="field"><label class="req">3–5 референсов аккаунтов / роликов <span class="hint">«хочу так же по подаче / визуалу» — ссылки</span></label>
+    <textarea name="refs_like" required></textarea></div>
+  <div class="field"><label>Анти-референсы <span class="hint">«вот так точно НЕ хочу» — ссылки</span></label>
+    <textarea name="refs_dislike"></textarea></div>
+  <div class="field"><label>Брендбук / гайдлайны <span class="hint">ссылка на Drive / Figma, если есть</span></label>
+    <input type="url" name="brandbook"></div>
+</section>
+
+<!-- 7 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">07</div>
+    <div class="card-title"><div class="kicker">Раздел 07</div><h3 class="serif">Что предоставляет заказчик</h3></div>
+  </div>
+  <div class="field"><label>Исходные материалы</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Готовые видео-исходники (свои съёмки)"><span>Свои видео-съёмки</span></label>
+      <label class="check"><input type="checkbox" value="Готовые фото"><span>Фото</span></label>
+      <label class="check"><input type="checkbox" value="Логотип и брендбук"><span>Логотип / брендбук</span></label>
+      <label class="check"><input type="checkbox" value="Готовые сценарии"><span>Сценарии</span></label>
+      <label class="check"><input type="checkbox" value="Тексты / экспертные посты"><span>Тексты экспертные</span></label>
+      <label class="check"><input type="checkbox" value="Своя озвучка / голосовые"><span>Свой голос</span></label>
+      <label class="check"><input type="checkbox" value="Ничего — снимаем / пишем с нуля"><span>Ничего, делаем с нуля</span></label>
+    </div>
+  </div>
+  <div class="field"><label>Кто пишет сценарии</label>
+    <select name="scripts_by">
+      <option value="">—</option>
+      <option>Я (заказчик) пишу и согласую</option>
+      <option>Исполнитель пишет, я согласую</option>
+      <option>Делаем вместе на созвоне</option>
+    </select></div>
+  <div class="field"><label>Кто снимает (если нужно живое видео)</label>
+    <select name="shooting_by">
+      <option value="">—</option>
+      <option>Снимаю сам(а) на телефон по ТЗ</option>
+      <option>Беру оператора на месте</option>
+      <option>Не нужно — только AI / готовые исходники</option>
+    </select></div>
+  <div class="field"><label>Кто публикует в соцсетях</label>
+    <select name="publish_by">
+      <option value="">—</option>
+      <option>Я сам(а)</option>
+      <option>Передаю доступы исполнителю</option>
+      <option>Через SMM-щика на моей стороне</option>
+    </select></div>
+  <div class="field"><label>Где обмениваемся файлами</label>
+    <select name="storage">
+      <option value="">—</option>
+      <option>Google Drive</option>
+      <option>Yandex Диск</option>
+      <option>iCloud</option>
+      <option>Dropbox</option>
+      <option>Telegram</option>
+    </select></div>
+  <div class="field"><label>Ссылка на папку с материалами</label>
+    <input type="url" name="materials_link" placeholder="https://..."></div>
+</section>
+
+<!-- 8 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">08</div>
+    <div class="card-title"><div class="kicker">Раздел 08</div><h3 class="serif">Технические требования</h3></div>
+  </div>
+  <div class="field"><label>Форматы кадра</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="9:16 (вертикаль)"><span>9:16</span></label>
+      <label class="check"><input type="checkbox" value="1:1 (квадрат)"><span>1:1</span></label>
+      <label class="check"><input type="checkbox" value="4:5 (Instagram пост)"><span>4:5</span></label>
+      <label class="check"><input type="checkbox" value="16:9 (горизонталь)"><span>16:9</span></label>
+    </div>
+  </div>
+  <div class="field"><label>Длительность одного ролика</label>
+    <select name="duration">
+      <option value="">—</option>
+      <option>До 15 сек</option>
+      <option>15–30 сек</option>
+      <option>30–60 сек</option>
+      <option>60–90 сек</option>
+      <option>Длинное видео (3+ мин)</option>
+    </select></div>
+  <div class="field"><label>Субтитры</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Нужны вшитые субтитры"><span>Вшитые субтитры</span></label>
+      <label class="check"><input type="checkbox" value="Русский"><span>RU</span></label>
+      <label class="check"><input type="checkbox" value="Английский"><span>EN</span></label>
+      <label class="check"><input type="checkbox" value="Испанский"><span>ES</span></label>
+    </div>
+  </div>
+  <div class="field"><label>Бренд-элементы в кадре</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Логотип-вотермарка"><span>Логотип-вотермарка</span></label>
+      <label class="check"><input type="checkbox" value="Фирменный шрифт"><span>Фирменный шрифт</span></label>
+      <label class="check"><input type="checkbox" value="Фирменные цвета"><span>Фирменные цвета</span></label>
+      <label class="check"><input type="checkbox" value="Заставка / endcard"><span>Заставка / endcard</span></label>
+    </div>
+  </div>
+  <div class="field"><label>Музыка</label>
+    <select name="music">
+      <option value="">—</option>
+      <option>Подбираете вы из трендов</option>
+      <option>У нас своя лицензированная библиотека</option>
+      <option>Без музыки / только голос</option>
+    </select></div>
+</section>
+
+<!-- 9 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">09</div>
+    <div class="card-title"><div class="kicker">Раздел 09</div><h3 class="serif">Сроки</h3></div>
+  </div>
+  <div class="row">
+    <div class="field"><label class="req">Когда хотите запуститься</label><input type="date" name="date_start" required></div>
+    <div class="field"><label>Дедлайн на финальные материалы</label><input type="date" name="date_deadline"></div>
+  </div>
+  <div class="field"><label>Привязка к запуску / распродаже / событию</label>
+    <input type="text" name="campaign" placeholder="Чёрная пятница, запуск курса 15 марта..."></div>
+  <div class="field"><label>Срочность</label>
+    <select name="urgency">
+      <option value="">—</option>
+      <option>Не горит — главное качество</option>
+      <option>Стандарт (2–3 недели на пакет)</option>
+      <option>Срочно (готовы доплатить за rush)</option>
+    </select></div>
+</section>
+
+<!-- 10 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">10</div>
+    <div class="card-title"><div class="kicker">Раздел 10</div><h3 class="serif">Бюджет</h3></div>
+  </div>
+  <div class="field"><label class="req">Ориентир бюджета на проект / месяц</label>
+    <input type="text" name="budget" required placeholder="Сумма или вилка"></div>
+  <div class="row">
+    <div class="field"><label>Валюта</label>
+      <select name="currency">
+        <option value="">—</option>
+        <option>USD</option><option>EUR</option><option>ARS</option><option>RUB</option>
+      </select>
+    </div>
+    <div class="field"><label>Условия оплаты</label>
+      <select name="payment">
+        <option value="">—</option>
+        <option>Предоплата 100%</option>
+        <option>50% / 50%</option>
+        <option>30% / 70%</option>
+        <option>Постоплата</option>
+      </select>
+    </div>
+  </div>
+  <div class="field"><label>Нужны закрывающие документы <span class="hint">счёт, акт, договор</span></label>
+    <select name="docs">
+      <option value="">—</option>
+      <option>Не нужны</option>
+      <option>Договор + чек</option>
+      <option>Полный пакет (договор / счёт / акт)</option>
+    </select></div>
+</section>
+
+<!-- 11 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">11</div>
+    <div class="card-title"><div class="kicker">Раздел 11</div><h3 class="serif">Правки и согласование</h3></div>
+  </div>
+  <div class="field"><label>Кто финально утверждает</label>
+    <input type="text" name="approver" placeholder="Имя, должность"></div>
+  <div class="field"><label>Сколько раундов правок ожидаете <span class="hint">стандарт — 2 раунда</span></label>
+    <select name="revisions">
+      <option value="">—</option>
+      <option>1 раунд</option>
+      <option>2 раунда</option>
+      <option>3 раунда</option>
+      <option>Без ограничений</option>
+    </select></div>
+  <div class="field"><label>Удобный канал для согласования</label>
+    <div class="checks">
+      <label class="check"><input type="checkbox" value="Telegram"><span>Telegram</span></label>
+      <label class="check"><input type="checkbox" value="WhatsApp"><span>WhatsApp</span></label>
+      <label class="check"><input type="checkbox" value="Email"><span>Email</span></label>
+      <label class="check"><input type="checkbox" value="Видеосозвон"><span>Видеосозвон</span></label>
+      <label class="check"><input type="checkbox" value="Notion / Trello"><span>Notion / Trello</span></label>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="card">
+  <div class="card-head">
+    <div class="card-num serif">12</div>
+    <div class="card-title"><div class="kicker">Раздел 12</div><h3 class="serif">Дополнительно</h3></div>
+  </div>
+  <div class="field"><label>Был ли опыт работы с подрядчиками по контенту? Что понравилось / что нет</label>
+    <textarea name="prev_experience"></textarea></div>
+  <div class="field"><label>Чего боитесь / что важно избежать в работе</label>
+    <textarea name="fears"></textarea></div>
+  <div class="field"><label>Что ещё важно знать</label>
+    <textarea name="extra"></textarea></div>
+</section>
+
+<div class="actions">
+  <button type="button" onclick="downloadPDF()">⬇ Скачать PDF</button>
+  <button type="button" class="secondary" onclick="sendTo('telegram')">Telegram</button>
+  <button type="button" class="secondary" onclick="sendTo('whatsapp')">WhatsApp</button>
+  <button type="button" class="secondary" onclick="sendTo('email')">Email</button>
+  <button type="button" class="secondary" onclick="copyAll()">Скопировать</button>
+</div>
+
+<footer class="foot">
+  <div class="sig serif">Olga Frolova</div>
+  <div>BUENOS AIRES · CONTENT PRODUCTION</div>
+</footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  // === НАСТРОЙКИ ===
+  const CONTACTS = {
+    telegram: 'olga_frolovalova',           // без @
+    whatsapp: '79108673599',                // номер без +
+    email:    'meshalkinaolyaaa@gmail.com'
+  };
+  // ================
+
+  const LABELS = {
+    brand_name:'Бренд / проект', brand_about:'Сфера', brand_site:'Сайт', brand_social:'Соцсети',
+    contact_name:'Контакт', contact_link:'Связь', brand_geo:'Гео / TZ',
+    qty_reels:'Кол-во рилсов', qty_posts:'Кол-во постов', frequency:'Формат',
+    kpi:'KPI', product:'Что продаём',
+    audience_who:'Аудитория', audience_pain:'Боль клиента', audience_refs:'Подписана на',
+    topics:'Темы', key_messages:'Ключевые сообщения', dont_topics:'Темы-табу',
+    refs_like:'Референсы (нравится)', refs_dislike:'Анти-референсы', brandbook:'Брендбук',
+    scripts_by:'Сценарии пишет', shooting_by:'Снимает',
+    publish_by:'Публикует', storage:'Файлы', materials_link:'Ссылка на материалы',
+    duration:'Длительность', music:'Музыка',
+    date_start:'Старт', date_deadline:'Дедлайн', campaign:'Кампания', urgency:'Срочность',
+    budget:'Бюджет', currency:'Валюта', payment:'Оплата', docs:'Документы',
+    approver:'Утверждает', revisions:'Раундов правок',
+    prev_experience:'Опыт', fears:'Чего избежать', extra:'Доп.'
+  };
+
+  function collect(){
+    const lines = ['📋 БРИФ НА КОНТЕНТ', '────────────────────', ''];
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card=>{
+      const title = card.querySelector('h3').textContent;
+      const block = [`▸ ${title.toUpperCase()}`];
+      let hasData = false;
+
+      card.querySelectorAll('.field').forEach(field=>{
+        const labelEl = field.querySelector('label');
+        const labelText = labelEl ? labelEl.firstChild.textContent.trim() : '';
+
+        field.querySelectorAll('input[type=text], input[type=url], input[type=email], input[type=date], input[type=number], textarea, select').forEach(el=>{
+          const v = el.value.trim();
+          if(!v) return;
+          const label = LABELS[el.name] || labelText || el.name;
+          block.push(`  • ${label}: ${v}`);
+          hasData = true;
+        });
+
+        const group = field.querySelector('.checks');
+        if(group){
+          const checked = [...group.querySelectorAll('input:checked')].map(i=>i.value);
+          if(checked.length){
+            block.push(`  • ${labelText}: ${checked.join(', ')}`);
+            hasData = true;
+          }
+        }
+      });
+
+      if(hasData){ lines.push(...block, ''); }
+    });
+    return lines.join('\n');
+  }
+
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  function translit(s){
+    const map = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',
+      к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',
+      ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+    return s.toLowerCase().split('').map(c => map[c] !== undefined ? map[c] : c).join('');
+  }
+
+  function makeFileName(){
+    const raw = (document.querySelector('input[name=brand_name]')?.value || 'brief').trim();
+    const slug = translit(raw).replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,40) || 'brief';
+    return `brief-${slug}-${new Date().toISOString().slice(0,10)}.pdf`;
+  }
+
+  function triggerDownload(blob, name){
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  }
+
+  async function generatePDFBlob(){
+    // Проверяем доступность библиотек
+    if (typeof html2canvas !== 'function') {
+      throw new Error('html2canvas не загружен (проверьте интернет)');
+    }
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      throw new Error('jsPDF не загружен (проверьте интернет)');
+    }
+
+    // Ждём готовность шрифтов
+    if (document.fonts && document.fonts.ready) {
+      try { await document.fonts.ready; } catch(e){}
+    }
+
+    // Loader-оверлей — пользователь видит только его, а PDF-документ
+    // рендерим прямо в видимой области (под оверлеем), чтобы html2canvas
+    // гарантированно его захватил
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(245,241,234,0.96);' +
+      'z-index:99999;display:flex;align-items:center;justify-content:center;' +
+      'font:500 16px Inter,sans-serif;color:#1c1916;backdrop-filter:blur(8px);' +
+      '-webkit-backdrop-filter:blur(8px);';
+    overlay.innerHTML = '<div style="text-align:center"><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:24px;color:#b54a25;margin-bottom:8px">Готовлю PDF</div><div style="font-size:13px;color:#7a7268;letter-spacing:.05em">это займёт пару секунд…</div></div>';
+    document.body.appendChild(overlay);
+
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:fixed;top:0;left:0;width:794px;background:#ffffff;z-index:99998;';
+    wrapper.innerHTML = buildPdfHTML();
+    document.body.appendChild(wrapper);
+
+    // Даём время на layout + догрузку шрифтов
+    await new Promise(r => setTimeout(r, 250));
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const target = wrapper.firstElementChild;
+    const rect = target.getBoundingClientRect();
+    console.log('[PDF] target rect:', rect.width, 'x', rect.height, 'scrollHeight:', target.scrollHeight);
+
+    try {
+      // html2canvas напрямую — больше контроля над процессом
+      const canvas = await html2canvas(target, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        width: 794,
+        height: target.scrollHeight,
+        windowWidth: 794
+      });
+
+      console.log('[PDF] canvas:', canvas.width, 'x', canvas.height);
+
+      if (canvas.width === 0 || canvas.height === 0) {
+        throw new Error('html2canvas вернул пустой canvas');
+      }
+
+      // Проверяем что в canvas есть НЕ-белый пиксель
+      const ctx = canvas.getContext('2d');
+      const sample = ctx.getImageData(canvas.width / 2, canvas.height / 4, 1, 1).data;
+      console.log('[PDF] sample pixel (mid-top):', sample[0], sample[1], sample[2]);
+
+      // jsPDF напрямую — собираем многостраничный PDF из canvas
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+      const pageWidth = pdf.internal.pageSize.getWidth();   // 210
+      const pageHeight = pdf.internal.pageSize.getHeight(); // 297
+
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * pageWidth) / canvas.width;
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+      let heightLeft = imgHeight;
+      let position = 0;
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      const blob = pdf.output('blob');
+      console.log('[PDF] blob size:', blob.size, 'bytes');
+
+      if (!blob || blob.size < 2000) {
+        throw new Error('PDF слишком маленький (' + (blob ? blob.size : 0) + ' байт)');
+      }
+      return blob;
+    } finally {
+      if (wrapper.parentNode) document.body.removeChild(wrapper);
+      if (overlay.parentNode) document.body.removeChild(overlay);
+    }
+  }
+
+  function buildChatURL(channel, brand, text){
+    const enc = encodeURIComponent(text);
+    if(channel==='telegram') return `https://t.me/${CONTACTS.telegram}?text=${enc}`;
+    if(channel==='whatsapp') return `https://wa.me/${CONTACTS.whatsapp}?text=${enc}`;
+    if(channel==='email')    return `mailto:${CONTACTS.email}?subject=${encodeURIComponent('Бриф на контент' + (brand ? ' · ' + brand : ''))}&body=${enc}`;
+    return '';
+  }
+
+  function showActionToast(msg, btnLabel, onClick){
+    const t = document.getElementById('toast');
+    t.innerHTML = '';
+    const span = document.createElement('span');
+    span.textContent = msg;
+    t.appendChild(span);
+    if (btnLabel && onClick) {
+      const b = document.createElement('button');
+      b.textContent = btnLabel;
+      b.style.cssText = 'margin-left:14px;padding:6px 14px;border-radius:7px;border:1px solid #fff;background:transparent;color:#fff;font:600 13px Inter,sans-serif;cursor:pointer';
+      b.onclick = ()=>{ onClick(); t.classList.remove('show'); };
+      t.appendChild(b);
+    }
+    t.classList.add('show');
+    clearTimeout(t._hideTimer);
+    t._hideTimer = setTimeout(()=>t.classList.remove('show'), 8000);
+  }
+
+  function openChat(channel, url){
+    if (channel === 'email') {
+      const a = document.createElement('a');
+      a.href = url;
+      a.rel = 'noopener';
+      a.target = '_self';
+      a.click();
+    } else {
+      window.open(url, '_blank', 'noopener');
+    }
+  }
+
+  async function sendTo(channel){
+    const sections = collectStructured();
+    if(!sections.length){ toast('Заполните хотя бы пару полей'); return; }
+
+    const brand = (document.querySelector('input[name=brand_name]')?.value || '').trim();
+    const contact = (document.querySelector('input[name=contact_name]')?.value || '').trim();
+    const fileName = makeFileName();
+    const shortText = `Здравствуйте! Заполненный бриф на контент во вложении.${brand ? ' Бренд: ' + brand : ''}${contact ? ' Контакт: ' + contact : ''}`;
+    const noteText = `${shortText}\n\n(PDF — во вложении, или прикреплён в папке «Загрузки»)`;
+    const url = buildChatURL(channel, brand, noteText);
+
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const canUseShare = isMobile && typeof navigator.share === 'function' && typeof navigator.canShare === 'function';
+
+    // === MOBILE: PDF + нативная шторка «Поделиться» ===
+    if (canUseShare) {
+      try {
+        const pdfBlob = await generatePDFBlob();
+        const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+        if (navigator.canShare({ files: [pdfFile] })) {
+          try {
+            await navigator.share({ files: [pdfFile], title: 'Бриф на контент', text: shortText });
+            toast('Готово ✓');
+            return;
+          } catch(e){
+            if (e.name === 'AbortError') return;
+            console.error('share failed', e);
+          }
+        }
+        triggerDownload(pdfBlob, fileName);
+        openChat(channel, url);
+      } catch(e){
+        console.error('[PDF ERROR]', e);
+        toast('Ошибка: ' + (e.message || e));
+      }
+      return;
+    }
+
+    // === DESKTOP ===
+    // 1) СИНХРОННО открываем blank-popup (внутри user gesture) — НЕ пишем туда HTML,
+    //    иначе ломается opener-связь и редирект не сработает.
+    //    Email — через mailto-anchor позже, popup не нужен.
+    const popup = (channel !== 'email') ? window.open('about:blank', '_blank') : null;
+    if (popup) {
+      try { popup.document.title = 'Готовлю PDF…'; } catch(e){}
+    }
+
+    // 2) Генерим PDF в основной (фокусной) вкладке — html2canvas работает корректно
+    let pdfBlob;
+    try {
+      pdfBlob = await generatePDFBlob();
+    } catch(e){
+      console.error('[PDF ERROR]', e);
+      if (popup && !popup.closed) popup.close();
+      toast('Ошибка PDF: ' + (e.message || e));
+      return;
+    }
+
+    // 3) Качаем PDF
+    triggerDownload(pdfBlob, fileName);
+
+    // 4) Редиректим popup на чат (или открываем mailto)
+    if (channel === 'email') {
+      const a = document.createElement('a');
+      a.href = url;
+      a.click();
+      toast('PDF скачан — прикрепите в письме');
+    } else if (popup && !popup.closed) {
+      try {
+        popup.location.href = url;
+        toast('PDF скачан — перетащите в чат');
+      } catch(e){
+        popup.close();
+        showActionToast('PDF скачан.', 'Открыть ' + (channel==='telegram'?'Telegram':'WhatsApp'), ()=>{
+          window.open(url, '_blank');
+        });
+      }
+    } else {
+      // popup был заблокирован — даём кнопку
+      showActionToast('PDF скачан.', 'Открыть ' + (channel==='telegram'?'Telegram':'WhatsApp'), ()=>{
+        window.open(url, '_blank');
+      });
+    }
+  }
+
+  function copyAll(){
+    const text = collect();
+    navigator.clipboard.writeText(text).then(()=>toast('Скопировано в буфер'));
+  }
+
+  function collectStructured(){
+    const sections = [];
+    document.querySelectorAll('.card').forEach(card=>{
+      const title = card.querySelector('h3').textContent;
+      const items = [];
+      card.querySelectorAll('.field').forEach(field=>{
+        const labelEl = field.querySelector('label');
+        const labelText = labelEl ? labelEl.firstChild.textContent.trim() : '';
+        field.querySelectorAll('input[type=text], input[type=url], input[type=email], input[type=date], input[type=number], textarea, select').forEach(el=>{
+          const v = el.value.trim();
+          if(!v) return;
+          items.push({label: LABELS[el.name] || labelText || el.name, value: v});
+        });
+        const group = field.querySelector('.checks');
+        if(group){
+          const checked = [...group.querySelectorAll('input:checked')].map(i=>i.value);
+          if(checked.length){ items.push({label: labelText, value: checked.join(', ')}); }
+        }
+      });
+      if(items.length){ sections.push({title, items}); }
+    });
+    return sections;
+  }
+
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function buildPdfHTML(){
+    const sections = collectStructured();
+    const brand = (document.querySelector('input[name=brand_name]')?.value || '').trim();
+    const contact = (document.querySelector('input[name=contact_name]')?.value || '').trim();
+    const today = new Date().toLocaleDateString('ru-RU', {day:'2-digit', month:'long', year:'numeric'});
+
+    const S = {
+      doc:    'font-family:Helvetica,Arial,sans-serif;color:#1c1916;padding:48px 50px;font-size:12px;line-height:1.55;background:#ffffff;width:794px;box-sizing:border-box;',
+      header: 'border-bottom:2px solid #b54a25;padding-bottom:22px;margin-bottom:30px;',
+      eyebrow:'font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#b54a25;font-weight:700;margin-bottom:10px;',
+      h1:     'font-size:34px;font-weight:700;margin:0 0 14px;letter-spacing:-0.02em;color:#1c1916;font-family:Georgia,"Times New Roman",serif;',
+      meta:   'font-size:11px;color:#7a7268;display:flex;gap:20px;flex-wrap:wrap;',
+      section:'page-break-inside:avoid;margin-bottom:26px;',
+      sectionH:'font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#b54a25;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid #e6dfd2;',
+      table:  'width:100%;border-collapse:collapse;',
+      tdK:    'padding:8px 14px 8px 0;vertical-align:top;border-bottom:1px solid #f0ebe0;color:#7a7268;font-weight:500;width:34%;font-size:11px;',
+      tdV:    'padding:8px 0;vertical-align:top;border-bottom:1px solid #f0ebe0;color:#1c1916;font-weight:500;word-break:break-word;font-size:12px;',
+      footer: 'margin-top:36px;padding-top:16px;border-top:1px solid #e6dfd2;font-size:10px;color:#999;text-align:center;letter-spacing:0.08em;text-transform:uppercase;',
+      sigName:'font-family:Georgia,serif;font-style:italic;font-size:14px;color:#1c1916;text-transform:none;letter-spacing:0;margin-bottom:4px;font-weight:400;'
+    };
+
+    const body = sections.map(s => `
+      <section style="${S.section}">
+        <h2 style="${S.sectionH}">${escapeHTML(s.title)}</h2>
+        <table style="${S.table}">
+          ${s.items.map(it => `
+            <tr>
+              <td style="${S.tdK}">${escapeHTML(it.label)}</td>
+              <td style="${S.tdV}">${escapeHTML(it.value).replace(/\n/g,'<br>')}</td>
+            </tr>`).join('')}
+        </table>
+      </section>
+    `).join('');
+
+    return `<div style="${S.doc}">
+        <div style="${S.header}">
+          <div style="${S.eyebrow}">Olga Frolova &middot; Buenos Aires</div>
+          <h1 style="${S.h1}">Бриф на контент</h1>
+          <div style="${S.meta}">
+            ${brand ? `<span><strong style="color:#1c1916">${escapeHTML(brand)}</strong></span>` : ''}
+            ${contact ? `<span>${escapeHTML(contact)}</span>` : ''}
+            <span>${today}</span>
+          </div>
+        </div>
+        ${body}
+        <div style="${S.footer}">
+          <div style="${S.sigName}">Olga Frolova</div>
+          Buenos Aires &middot; Content Production &middot; @olga_frolovalova
+        </div>
+      </div>`;
+  }
+
+  async function downloadPDF(){
+    if(!collectStructured().length){ toast('Заполните хотя бы пару полей'); return; }
+    try {
+      const blob = await generatePDFBlob();
+      triggerDownload(blob, makeFileName());
+      toast('PDF сохранён');
+    } catch(e){
+      console.error('[PDF ERROR]', e);
+      toast('Ошибка: ' + (e.message || e));
+    }
+  }
+
+  // Progress bar — считает заполненность формы
+  function updateProgress(){
+    const fields = document.querySelectorAll('.field');
+    let filled = 0, total = 0;
+    fields.forEach(f=>{
+      const inputs = f.querySelectorAll('input[type=text], input[type=url], input[type=email], input[type=date], input[type=number], textarea, select');
+      const checks = f.querySelector('.checks');
+      if(inputs.length){
+        inputs.forEach(i=>{
+          total++;
+          if(i.value.trim()) filled++;
+        });
+      }
+      if(checks){
+        total++;
+        if(checks.querySelector('input:checked')) filled++;
+      }
+    });
+    const pct = total ? Math.round((filled/total)*100) : 0;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+  document.addEventListener('input', updateProgress);
+  document.addEventListener('change', updateProgress);
+  updateProgress();
+</script>
+</body>
+</html>
