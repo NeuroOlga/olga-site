@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#fb7185">
+<title>¡Hoy cumplo 3! — Timur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { overflow-x: hidden; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 20% 10%, #fef3c7 0%, transparent 40%),
+      radial-gradient(circle at 80% 30%, #fbcfe8 0%, transparent 45%),
+      radial-gradient(circle at 30% 80%, #c7d2fe 0%, transparent 40%),
+      linear-gradient(180deg, #fff7ed 0%, #fce7f3 60%, #ddd6fe 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #4c1d95;
+    text-align: center;
+    padding: 20px 18px 80px;
+    position: relative;
+  }
+
+  /* Floating background elements */
+  .bg-decor {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; overflow: hidden; z-index: 0;
+  }
+  .balloon {
+    position: absolute; width: 38px; height: 48px;
+    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+    animation: balloon-float linear infinite;
+    opacity: 0.55;
+  }
+  .balloon::after {
+    content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 7px solid currentColor;
+  }
+  .balloon::before {
+    content: ''; position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
+    width: 1px; height: 50px; background: rgba(0,0,0,0.15);
+  }
+  @keyframes balloon-float {
+    0% { transform: translateY(110vh) rotate(-3deg); }
+    50% { transform: translateY(50vh) rotate(3deg); }
+    100% { transform: translateY(-30vh) rotate(-3deg); }
+  }
+  .star-bg {
+    position: absolute;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.3); }
+  }
+  .content { position: relative; z-index: 1; }
+
+  /* Animations */
+  .screen { display: none; animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .screen.active { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes pop { 0% { transform: scale(0.7); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  @keyframes float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-10px) rotate(1deg); } }
+  @keyframes wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+  @keyframes flicker { 0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 1; } 50% { transform: translateX(-50%) scale(1.15) rotate(2deg); opacity: 0.85; } }
+  @keyframes shine {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* HERO */
+  .hero { padding-top: 4px; }
+  .emoji-row {
+    font-size: 32px; letter-spacing: 12px; margin-bottom: 14px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+  .age-badge {
+    display: inline-block; position: relative;
+    background: linear-gradient(135deg, #fb7185 0%, #f59e0b 100%);
+    color: white; font-family: 'Fredoka', sans-serif; font-weight: 700;
+    padding: 6px 22px; border-radius: 50px; font-size: 16px;
+    letter-spacing: 2px; text-transform: uppercase;
+    box-shadow: 0 6px 20px rgba(251,113,133,0.4);
+    margin-bottom: 14px;
+  }
+  .photo-wrap {
+    position: relative; width: 240px; height: 240px; margin: 0 auto 18px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .photo-frame {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #fb7185, #f59e0b, #fde047, #34d399, #38bdf8, #a855f7, #fb7185);
+    padding: 8px;
+    box-shadow: 0 12px 40px rgba(168,85,247,0.3), 0 4px 12px rgba(251,113,133,0.25);
+  }
+  .photo-inner {
+    width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+    background: white;
+    border: 4px solid white;
+  }
+  .photo-inner img { width: 100%; height: 100%; object-fit: cover; object-position: center 8%; }
+  .photo-sparkle {
+    position: absolute; font-size: 28px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  }
+  .photo-sparkle.s1 { top: -4px; right: -8px; animation: twinkle 1.6s ease-in-out infinite; }
+  .photo-sparkle.s2 { bottom: 8px; left: -10px; animation: twinkle 2s ease-in-out infinite 0.5s; }
+  .photo-sparkle.s3 { top: 30%; right: -16px; animation: twinkle 1.8s ease-in-out infinite 1s; }
+
+  h1.hero-title {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 38px; line-height: 1; margin-bottom: 6px;
+    background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #6366f1 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: none;
+  }
+  .hero-subtitle {
+    font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 600;
+    color: #be185d; margin-bottom: 18px;
+  }
+  .hero-subtitle .age {
+    display: inline-block;
+    background: linear-gradient(135deg, #fde047, #f59e0b);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-weight: 700; font-size: 28px;
+  }
+  .hero-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px; padding: 18px 20px; margin: 0 auto 20px;
+    max-width: 340px;
+    box-shadow: 0 8px 24px rgba(168,85,247,0.12);
+    border: 2px solid rgba(255,255,255,0.6);
+  }
+  .hero-card p {
+    font-size: 16px; font-weight: 700; color: #6b21a8; line-height: 1.4;
+  }
+  .start-btn {
+    background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+    background-size: 200% 200%;
+    color: white; border: none;
+    font-family: 'Fredoka', sans-serif; font-size: 22px; font-weight: 700;
+    padding: 18px 44px; border-radius: 50px; cursor: pointer;
+    box-shadow: 0 10px 30px rgba(236,72,153,0.45), inset 0 -4px 0 rgba(0,0,0,0.1);
+    animation: float 2.5s ease-in-out infinite, shine 3s linear infinite;
+    background-image: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%),
+                      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  }
+  .start-btn:active { transform: scale(0.95); }
+
+  /* QUIZ */
+  .progress {
+    display: flex; justify-content: center; gap: 8px; margin-bottom: 22px;
+  }
+  .progress-dot {
+    width: 30px; height: 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.6);
+    border: 2px solid #fbcfe8;
+    transition: all 0.4s;
+  }
+  .progress-dot.active {
+    background: linear-gradient(90deg, #ec4899, #f59e0b);
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(236,72,153,0.4);
+  }
+  .quiz-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 28px; padding: 24px 20px;
+    box-shadow: 0 12px 40px rgba(168,85,247,0.15);
+    border: 3px solid white;
+    max-width: 360px; margin: 0 auto;
+  }
+  .question {
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: 22px; color: #6b21a8;
+    margin-bottom: 22px; line-height: 1.25;
+  }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    background: white;
+    border: 3px solid transparent;
+    background-image: linear-gradient(white, white),
+                      linear-gradient(135deg, #fbcfe8, #fde68a);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-radius: 18px;
+    padding: 14px 18px; font-size: 20px; font-weight: 700; cursor: pointer;
+    color: #6b21a8; min-height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-family: 'Fredoka', sans-serif;
+    box-shadow: 0 4px 12px rgba(168,85,247,0.08);
+    line-height: 1.2;
+  }
+  .option:active { transform: scale(0.96); }
+  .option.correct {
+    background-image: linear-gradient(135deg, #86efac, #34d399), linear-gradient(135deg, #16a34a, #16a34a);
+    color: white; animation: pop 0.5s;
+    box-shadow: 0 6px 20px rgba(22,163,74,0.4);
+  }
+  .option.wrong {
+    background-image: linear-gradient(135deg, #fca5a5, #fb7185), linear-gradient(135deg, #dc2626, #dc2626);
+    color: white;
+  }
+  .option.disabled { pointer-events: none; }
+  .option.disabled:not(.correct):not(.wrong) { opacity: 0.4; }
+
+  .feedback {
+    margin-top: 22px;
+    background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 100%);
+    border: 3px solid white;
+    border-radius: 20px; padding: 18px 16px;
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: 17px; color: #6b21a8;
+    box-shadow: 0 8px 24px rgba(168,85,247,0.15);
+    display: none;
+    animation: pop 0.5s ease;
+    line-height: 1.35;
+  }
+  .feedback.show { display: block; }
+  .feedback .emoji { font-size: 44px; display: block; margin-bottom: 6px; line-height: 1; }
+  .next-btn {
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    color: white; border: none;
+    font-family: 'Fredoka', sans-serif;
+    padding: 14px 32px; border-radius: 30px; font-size: 18px; font-weight: 700;
+    margin-top: 18px; cursor: pointer; display: none;
+    box-shadow: 0 6px 20px rgba(168,85,247,0.4), inset 0 -3px 0 rgba(0,0,0,0.1);
+  }
+  .next-btn.show { display: inline-block; }
+  .next-btn:active { transform: scale(0.96); }
+
+  /* CAKE GAME */
+  .cake-screen { padding-top: 20px; }
+  .cake-title {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 28px; margin-bottom: 8px;
+    background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .cake-screen .hint {
+    font-family: 'Fredoka', sans-serif; font-weight: 500;
+    font-size: 17px; color: #be185d; margin-bottom: 20px;
+    background: rgba(255,255,255,0.6); padding: 8px 16px;
+    border-radius: 30px; display: inline-block;
+    border: 2px solid white;
+  }
+  .cake-stage {
+    position: relative; width: 320px; height: 380px;
+    margin: 0 auto; touch-action: none;
+  }
+  .candle {
+    position: absolute; width: 18px; height: 76px;
+    border-radius: 4px;
+    bottom: 220px; z-index: 5;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -3px 0 0 rgba(0,0,0,0.1);
+  }
+  .candle.c1 { background: repeating-linear-gradient(180deg, #ec4899 0, #ec4899 12px, #fef2f2 12px, #fef2f2 24px); }
+  .candle.c2 { background: repeating-linear-gradient(180deg, #38bdf8 0, #38bdf8 12px, #fef2f2 12px, #fef2f2 24px); }
+  .candle.c3 { background: repeating-linear-gradient(180deg, #a855f7 0, #a855f7 12px, #fef2f2 12px, #fef2f2 24px); }
+  .candle::before {
+    content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 12px; background: #4a3520; border-radius: 1px;
+  }
+  .flame {
+    position: absolute; top: -38px; left: 50%; transform: translateX(-50%);
+    width: 24px; height: 36px;
+    background: radial-gradient(ellipse at center bottom, #fff 0%, #fde047 25%, #f59e0b 55%, #dc2626 100%);
+    border-radius: 50% 50% 30% 30%;
+    animation: flicker 0.35s ease-in-out infinite;
+    filter: drop-shadow(0 0 16px #fbbf24) drop-shadow(0 0 4px #f59e0b);
+  }
+  .flame.out { opacity: 0; transform: translateX(-50%) scale(0.2); transition: all 0.35s; animation: none; }
+  .smoke {
+    position: absolute; top: -38px; left: 50%; transform: translateX(-50%);
+    width: 22px; height: 22px; opacity: 0; pointer-events: none;
+    background: radial-gradient(circle, rgba(180,180,180,0.7) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .smoke.show { animation: smoke-rise 1.4s ease-out forwards; }
+  @keyframes smoke-rise {
+    0% { opacity: 0.8; transform: translate(-50%, 0) scale(0.5); }
+    100% { opacity: 0; transform: translate(-50%, -80px) scale(2.5); }
+  }
+
+  /* Cake — pink + cream tiers with sprinkles */
+  .cake-css {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 320px;
+  }
+  .cake-tier {
+    position: relative;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.05), 0 6px 20px rgba(0,0,0,0.12);
+    margin: 0 auto;
+  }
+  .cake-tier::before {
+    content: ''; position: absolute; top: -3px; left: 0; right: 0; height: 18px;
+    background-size: 28px 18px;
+    background-repeat: repeat-x;
+  }
+  .cake-tier-top {
+    width: 180px; height: 100px;
+    background: linear-gradient(180deg, #fff7ed 0%, #fed7aa 100%);
+    border: 3px solid #fb923c;
+    border-radius: 16px 16px 8px 8px;
+  }
+  .cake-tier-top::before {
+    background: radial-gradient(ellipse 14px 10px at 14px 0, #fff7ed 50%, transparent 51%);
+  }
+  .cake-tier-bottom {
+    width: 280px; height: 130px;
+    background: linear-gradient(180deg, #fce7f3 0%, #f9a8d4 100%);
+    border: 3px solid #ec4899;
+    border-radius: 16px 16px 8px 8px;
+    margin-top: -3px;
+  }
+  .cake-tier-bottom::before {
+    background: radial-gradient(ellipse 18px 12px at 18px 0, #fce7f3 50%, transparent 51%);
+  }
+  .cake-plate {
+    width: 310px; height: 14px; margin: -2px auto 0;
+    background: linear-gradient(180deg, #f3f4f6 0%, #9ca3af 100%);
+    border-radius: 8px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  }
+  /* Sprinkles */
+  .sprinkle {
+    position: absolute; width: 6px; height: 14px; border-radius: 3px;
+    transform-origin: center;
+  }
+  .cake-decor {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    font-size: 18px; letter-spacing: 6px; white-space: nowrap;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+  }
+  .cake-decor.top { top: 56px; }
+  .cake-decor.bottom { top: 70px; }
+
+  /* FINAL */
+  .final-screen .photo-wrap {
+    width: 200px; height: 200px;
+    animation: pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), float 3s ease-in-out infinite 0.7s;
+  }
+  .final-screen h1 {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 44px; margin: 14px 0 10px;
+    background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #f59e0b 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .final-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px; padding: 20px;
+    box-shadow: 0 12px 40px rgba(168,85,247,0.18);
+    border: 3px solid white;
+    max-width: 340px; margin: 0 auto 18px;
+  }
+  .final-card p {
+    font-family: 'Fredoka', sans-serif; font-weight: 500;
+    font-size: 17px; color: #6b21a8; line-height: 1.45;
+  }
+  .final-card .strong {
+    font-weight: 700; font-size: 19px; color: #be185d;
+    display: block; margin-bottom: 8px;
+  }
+  .wa-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white; border: none;
+    font-family: 'Fredoka', sans-serif;
+    padding: 18px 28px; border-radius: 50px; font-size: 19px; font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(37,211,102,0.45), inset 0 -4px 0 rgba(0,0,0,0.15);
+    animation: float 2.5s ease-in-out infinite;
+  }
+  .wa-btn:active { transform: scale(0.96); }
+  .wa-icon { font-size: 26px; }
+  .small {
+    font-size: 13px; color: #6b21a8; margin-top: 18px; opacity: 0.7; line-height: 1.4;
+    font-family: 'Fredoka', sans-serif;
+  }
+  .confetti {
+    position: fixed; top: -20px; width: 12px; height: 12px;
+    pointer-events: none; z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background decoration -->
+<div class="bg-decor" id="bg-decor"></div>
+
+<div class="content">
+
+<!-- HERO -->
+<div class="screen active" id="screen-hero">
+  <div class="hero">
+    <div class="emoji-row">🎈 🎂 🎉</div>
+    <div class="age-badge">¡Cumple 3!</div>
+    <div class="photo-wrap">
+      <div class="photo-frame">
+        <div class="photo-inner">
+          <img src="assets/timur-cake.jpg" alt="Timur" onerror="this.style.display='none'">
+        </div>
+      </div>
+      <span class="photo-sparkle s1">✨</span>
+      <span class="photo-sparkle s2">⭐</span>
+      <span class="photo-sparkle s3">💫</span>
+    </div>
+    <h1 class="hero-title">¡Hola! Soy Timur</h1>
+    <div class="hero-subtitle">Hoy cumplo <span class="age">3 años</span> 🎂</div>
+    <div class="hero-card">
+      <p>¿Querés conocerme?<br>Jugá conmigo este quiz 👇</p>
+    </div>
+    <button class="start-btn" onclick="goQuiz()">¡Empezar! 🎮</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="progress" id="progress"></div>
+  <div class="quiz-card">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback">
+      <span class="emoji" id="feedback-emoji"></span>
+      <div id="feedback-text"></div>
+    </div>
+  </div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Siguiente →</button>
+</div>
+
+<!-- CAKE GAME -->
+<div class="screen cake-screen" id="screen-cake">
+  <h2 class="cake-title">🎂 ¡Apagá las velitas!</h2>
+  <p class="hint">Pasá el dedo sobre las velas 👆</p>
+  <div class="cake-stage" id="cake-stage">
+    <div class="candle c1" id="candle1" style="left: calc(50% - 56px);">
+      <div class="flame" id="flame1"></div>
+      <div class="smoke" id="smoke1"></div>
+    </div>
+    <div class="candle c2" id="candle2" style="left: calc(50% - 9px);">
+      <div class="flame" id="flame2"></div>
+      <div class="smoke" id="smoke2"></div>
+    </div>
+    <div class="candle c3" id="candle3" style="left: calc(50% + 38px);">
+      <div class="flame" id="flame3"></div>
+      <div class="smoke" id="smoke3"></div>
+    </div>
+    <div class="cake-css" id="cake-css">
+      <div class="cake-tier cake-tier-top">
+        <span class="cake-decor top">🍓 ⭐ 🍓</span>
+      </div>
+      <div class="cake-tier cake-tier-bottom">
+        <span class="cake-decor bottom">⭐ 🍓 💖 🍓 ⭐</span>
+      </div>
+      <div class="cake-plate"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="screen final-screen" id="screen-final">
+  <div class="emoji-row">🎉 🎂 🎈</div>
+  <div class="photo-wrap">
+    <div class="photo-frame">
+      <div class="photo-inner">
+        <img src="assets/timur-cake.jpg" alt="Timur">
+      </div>
+    </div>
+    <span class="photo-sparkle s1">✨</span>
+    <span class="photo-sparkle s2">⭐</span>
+  </div>
+  <h1>¡Gracias!</h1>
+  <div class="final-card">
+    <p>
+      <span class="strong">¿Querés mandarme un saludo en video? 🎥</span>
+      Mi mamá me lo va a mostrar 💛
+    </p>
+  </div>
+  <a class="wa-btn" id="wa-link" href="#">
+    <span class="wa-icon">💬</span>
+    <span>Mandar saludo</span>
+  </a>
+  <p class="small">Grabá un video corto diciendo<br>«¡Feliz cumple Timur!» 🎂</p>
+</div>
+
+</div>
+
+<script>
+const WHATSAPP_NUMBER = '79108673599';
+const WA_MESSAGE = encodeURIComponent('¡Feliz cumpleaños Timur! 🎂🎉');
+document.getElementById('wa-link').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
+
+// Spawn balloons + stars in background
+(function spawnDecor() {
+  const decor = document.getElementById('bg-decor');
+  const balloonColors = ['#fb7185', '#f59e0b', '#a855f7', '#38bdf8', '#34d399', '#ec4899'];
+  for (let i = 0; i < 7; i++) {
+    const b = document.createElement('div');
+    b.className = 'balloon';
+    const color = balloonColors[i % balloonColors.length];
+    b.style.background = `radial-gradient(circle at 35% 30%, ${color}cc, ${color})`;
+    b.style.color = color;
+    b.style.left = (8 + i * 13) + '%';
+    b.style.animationDuration = (14 + Math.random() * 8) + 's';
+    b.style.animationDelay = (-Math.random() * 14) + 's';
+    decor.appendChild(b);
+  }
+  const stars = ['⭐', '✨', '💫', '🌟'];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-bg';
+    s.textContent = stars[i % stars.length];
+    s.style.fontSize = (12 + Math.random() * 14) + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 2) + 's';
+    decor.appendChild(s);
+  }
+})();
+
+// Spawn sprinkles on cake
+(function spawnSprinkles() {
+  const cake = document.getElementById('cake-css');
+  if (!cake) return;
+  const colors = ['#ec4899', '#fbbf24', '#34d399', '#38bdf8', '#a855f7', '#f59e0b', '#fde047'];
+  // Top tier sprinkles
+  const topTier = cake.querySelector('.cake-tier-top');
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.className = 'sprinkle';
+    s.style.background = colors[i % colors.length];
+    s.style.left = (10 + Math.random() * 80) + '%';
+    s.style.top = (15 + Math.random() * 75) + '%';
+    s.style.transform = `rotate(${Math.random() * 180}deg)`;
+    topTier.appendChild(s);
+  }
+  // Bottom tier sprinkles
+  const botTier = cake.querySelector('.cake-tier-bottom');
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('div');
+    s.className = 'sprinkle';
+    s.style.background = colors[i % colors.length];
+    s.style.left = (5 + Math.random() * 90) + '%';
+    s.style.top = (15 + Math.random() * 75) + '%';
+    s.style.transform = `rotate(${Math.random() * 180}deg)`;
+    botTier.appendChild(s);
+  }
+})();
+
+// Positions distributed: 1, 2, 1, 0, 2, 0, 1 — никогда два правильных ответа подряд на одной позиции
+const QUESTIONS = [
+  {
+    q: '¿Cuántos años cumple Timur hoy?',
+    options: ['Dos', 'Tres', 'Cuatro'],
+    correct: 1,
+    feedback: { emoji: '🎂', text: '¡Hoy cumplo 3 años!' }
+  },
+  {
+    q: '¿Cuál es su superhéroe favorito?',
+    options: ['Batman', 'Superman', 'Spider-Man'],
+    correct: 2,
+    feedback: { emoji: '🕷️', text: '¡Spider-Man es mi favorito!' }
+  },
+  {
+    q: '¿Cuántos pasaportes tiene Timur?',
+    options: ['Uno', 'Dos', 'Tres'],
+    correct: 1,
+    feedback: { emoji: '🇷🇺🇦🇷', text: '¡Tengo dos! Soy ruso y argentino' }
+  },
+  {
+    q: '¿Qué deporte hace Timur?',
+    options: ['Fútbol', 'Tenis', 'Natación'],
+    correct: 0,
+    feedback: { emoji: '⚽', text: '¡Juego al fútbol!' }
+  },
+  {
+    q: '¿Cuántas veces voló en avión en su vida?',
+    options: ['Cinco', 'Quince', 'Treinta'],
+    correct: 2,
+    feedback: { emoji: '✈️', text: '¡30 vuelos en 3 años!' }
+  },
+  {
+    q: '¿Con qué peluche duerme Timur?',
+    options: ['Gatito-salchicha', 'Perrito', 'Osito'],
+    correct: 0,
+    feedback: { emoji: '🐱', text: '¡Duermo con mi gatito-salchicha!' }
+  },
+  {
+    q: '¿Cuál es su comida favorita?',
+    options: ['Pizza', 'Pelmeni y rolls', 'Hamburguesa'],
+    correct: 1,
+    feedback: { emoji: '🥟', text: '¡Me encantan los пельмени (comida rusa: masa rellena de carne) y los rolls!' }
+  }
+];
+
+let currentQ = 0;
+
+function show(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goQuiz() {
+  currentQ = 0;
+  renderQuestion();
+  show('screen-quiz');
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const progress = document.getElementById('progress');
+  progress.innerHTML = QUESTIONS.map((_, i) =>
+    `<div class="progress-dot ${i <= currentQ ? 'active' : ''}"></div>`
+  ).join('');
+  document.getElementById('question').textContent = q.q;
+  const optsEl = document.getElementById('options');
+  optsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.onclick = () => answer(i);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('next-btn').classList.remove('show');
+}
+
+function answer(i) {
+  const q = QUESTIONS[currentQ];
+  const opts = document.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('disabled'));
+  if (i === q.correct) {
+    opts[i].classList.add('correct');
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+  }
+  setTimeout(() => {
+    document.getElementById('feedback-emoji').textContent = q.feedback.emoji;
+    document.getElementById('feedback-text').textContent = q.feedback.text;
+    document.getElementById('feedback').classList.add('show');
+    document.getElementById('next-btn').classList.add('show');
+    document.getElementById('next-btn').textContent =
+      currentQ < QUESTIONS.length - 1 ? 'Siguiente →' : '¡A la torta! 🎂';
+  }, 600);
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < QUESTIONS.length) {
+    renderQuestion();
+  } else {
+    show('screen-cake');
+    setupCakeGame();
+  }
+}
+
+let candlesOut = 0;
+const TOTAL_CANDLES = 3;
+
+function setupCakeGame() {
+  candlesOut = 0;
+  for (let i = 1; i <= TOTAL_CANDLES; i++) {
+    document.getElementById('flame' + i).classList.remove('out');
+  }
+  const stage = document.getElementById('cake-stage');
+  const handleMove = (clientX, clientY) => {
+    for (let i = 1; i <= TOTAL_CANDLES; i++) {
+      const flame = document.getElementById('flame' + i);
+      if (flame.classList.contains('out')) continue;
+      const candle = document.getElementById('candle' + i);
+      const candleRect = candle.getBoundingClientRect();
+      const cx = candleRect.left + candleRect.width / 2;
+      const cy = candleRect.top;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 55) {
+        flame.classList.add('out');
+        const smoke = document.getElementById('smoke' + i);
+        smoke.classList.remove('show');
+        void smoke.offsetWidth;
+        smoke.classList.add('show');
+        candlesOut++;
+        if (candlesOut === TOTAL_CANDLES) {
+          setTimeout(() => {
+            launchConfetti();
+            setTimeout(() => show('screen-final'), 1400);
+          }, 500);
+        }
+      }
+    }
+  };
+  stage.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    handleMove(t.clientX, t.clientY);
+  }, { passive: false });
+  stage.addEventListener('mousemove', e => {
+    if (e.buttons) handleMove(e.clientX, e.clientY);
+  });
+  stage.addEventListener('click', e => handleMove(e.clientX, e.clientY));
+}
+
+function launchConfetti() {
+  const colors = ['#ec4899', '#f59e0b', '#34d399', '#38bdf8', '#a855f7', '#fde047', '#fb7185'];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.width = (8 + Math.random() * 8) + 'px';
+    c.style.height = (8 + Math.random() * 8) + 'px';
+    document.body.appendChild(c);
+    const dur = 1800 + Math.random()*1800;
+    c.animate([
+      { transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+      { transform: `translateY(110vh) rotate(${720 + Math.random()*720}deg)`, opacity: 1 }
+    ], { duration: dur, easing: 'cubic-bezier(0.4, 0.0, 0.6, 1)' });
+    setTimeout(() => c.remove(), dur);
+  }
+}
+</script>
+</body>
+</html>
