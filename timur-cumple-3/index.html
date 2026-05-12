@@ -234,6 +234,17 @@
   }
   .feedback.show { display: block; }
   .feedback .emoji { font-size: 44px; display: block; margin-bottom: 6px; line-height: 1; }
+  .feedback img.tim-photo {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    max-height: 340px;
+    object-fit: cover;
+    border-radius: 18px;
+    margin: 10px auto 6px;
+    box-shadow: 0 6px 20px rgba(168,85,247,0.25);
+    border: 3px solid white;
+  }
   .next-btn {
     background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
     color: white; border: none;
@@ -439,6 +450,7 @@
     <div class="options" id="options"></div>
     <div class="feedback" id="feedback">
       <span class="emoji" id="feedback-emoji"></span>
+      <img class="tim-photo" id="feedback-photo" alt="Timur" style="display:none">
       <div id="feedback-text"></div>
     </div>
   </div>
@@ -570,43 +582,43 @@ const QUESTIONS = [
     q: '¿Cuántos años cumple Timur hoy?',
     options: ['Dos', 'Tres', 'Cuatro'],
     correct: 1,
-    feedback: { emoji: '🎂', text: '¡Hoy cumplo 3 años!' }
+    feedback: { emoji: '🎂', text: '¡Hoy cumplo 3 años!', photo: 'assets/tim/tim-01.jpg' }
   },
   {
     q: '¿Cuál es su superhéroe favorito?',
     options: ['Batman', 'Superman', 'Spider-Man'],
     correct: 2,
-    feedback: { emoji: '🕷️', text: '¡Spider-Man es mi favorito!' }
+    feedback: { emoji: '🕷️', text: '¡Spider-Man es mi favorito!', photo: 'assets/tim/tim-02.jpg' }
   },
   {
     q: '¿Cuántos pasaportes tiene Timur?',
     options: ['Uno', 'Dos', 'Tres'],
     correct: 1,
-    feedback: { emoji: '🇷🇺🇦🇷', text: '¡Tengo dos! Soy ruso y argentino' }
+    feedback: { emoji: '🇷🇺🇦🇷', text: '¡Tengo dos! Soy ruso y argentino', photo: 'assets/tim/tim-03.jpg' }
   },
   {
     q: '¿Qué deporte hace Timur?',
     options: ['Fútbol', 'Tenis', 'Natación'],
     correct: 0,
-    feedback: { emoji: '⚽', text: '¡Juego al fútbol!' }
+    feedback: { emoji: '⚽', text: '¡Juego al fútbol!', photo: 'assets/tim/tim-04.jpg' }
   },
   {
     q: '¿Cuántas veces voló en avión en su vida?',
     options: ['Cinco', 'Quince', 'Treinta'],
     correct: 2,
-    feedback: { emoji: '✈️', text: '¡30 vuelos en 3 años!' }
+    feedback: { emoji: '✈️', text: '¡30 vuelos en 3 años!', photo: 'assets/tim/tim-05.jpg' }
   },
   {
     q: '¿Con qué peluche duerme Timur?',
     options: ['Gatito-salchicha', 'Perrito', 'Osito'],
     correct: 0,
-    feedback: { emoji: '🐱', text: '¡Duermo con mi gatito-salchicha!' }
+    feedback: { emoji: '🐱', text: '¡Duermo con mi gatito-salchicha!', photo: 'assets/tim/tim-06.jpg' }
   },
   {
     q: '¿Cuál es su comida favorita?',
     options: ['Pizza', 'Pelmeni y rolls', 'Hamburguesa'],
     correct: 1,
-    feedback: { emoji: '🥟', text: '¡Me encantan los пельмени (comida rusa: masa rellena de carne) y los rolls!' }
+    feedback: { emoji: '🥟', text: '¡Me encantan los пельмени (comida rusa: masa rellena de carne) y los rolls!', photo: 'assets/tim/tim-07.jpg' }
   }
 ];
 
@@ -656,6 +668,13 @@ function answer(i) {
   }
   setTimeout(() => {
     document.getElementById('feedback-emoji').textContent = q.feedback.emoji;
+    const photoEl = document.getElementById('feedback-photo');
+    if (q.feedback.photo) {
+      photoEl.src = q.feedback.photo;
+      photoEl.style.display = 'block';
+    } else {
+      photoEl.style.display = 'none';
+    }
     document.getElementById('feedback-text').textContent = q.feedback.text;
     document.getElementById('feedback').classList.add('show');
     document.getElementById('next-btn').classList.add('show');
