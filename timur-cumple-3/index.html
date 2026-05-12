@@ -234,7 +234,8 @@
   }
   .feedback.show { display: block; }
   .feedback .emoji { font-size: 44px; display: block; margin-bottom: 6px; line-height: 1; }
-  .feedback img.tim-photo {
+  .feedback img.tim-photo,
+  .feedback video.tim-video {
     display: block;
     width: 100%;
     max-width: 320px;
@@ -244,6 +245,7 @@
     margin: 10px auto 6px;
     box-shadow: 0 6px 20px rgba(168,85,247,0.25);
     border: 3px solid white;
+    background: #f8f0ff;
   }
   .next-btn {
     background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
@@ -451,6 +453,7 @@
     <div class="feedback" id="feedback">
       <span class="emoji" id="feedback-emoji"></span>
       <img class="tim-photo" id="feedback-photo" alt="Timur" style="display:none">
+      <video class="tim-video" id="feedback-video" muted autoplay loop playsinline preload="none" style="display:none"></video>
       <div id="feedback-text"></div>
     </div>
   </div>
@@ -600,7 +603,7 @@ const QUESTIONS = [
     q: '¿Qué deporte hace Timur?',
     options: ['Fútbol', 'Tenis', 'Natación'],
     correct: 0,
-    feedback: { emoji: '⚽', text: '¡Juego al fútbol!', photo: 'assets/tim/tim-04.jpg' }
+    feedback: { emoji: '⚽', text: '¡Juego al fútbol!', video: 'assets/tim/football.mp4' }
   },
   {
     q: '¿Cuántas veces voló en avión en su vida?',
@@ -669,11 +672,23 @@ function answer(i) {
   setTimeout(() => {
     document.getElementById('feedback-emoji').textContent = q.feedback.emoji;
     const photoEl = document.getElementById('feedback-photo');
-    if (q.feedback.photo) {
+    const videoEl = document.getElementById('feedback-video');
+    if (q.feedback.video) {
+      photoEl.style.display = 'none';
+      videoEl.src = q.feedback.video;
+      videoEl.style.display = 'block';
+      videoEl.load();
+      videoEl.play().catch(()=>{});
+    } else if (q.feedback.photo) {
+      videoEl.pause();
+      videoEl.removeAttribute('src');
+      videoEl.load();
+      videoEl.style.display = 'none';
       photoEl.src = q.feedback.photo;
       photoEl.style.display = 'block';
     } else {
       photoEl.style.display = 'none';
+      videoEl.style.display = 'none';
     }
     document.getElementById('feedback-text').textContent = q.feedback.text;
     document.getElementById('feedback').classList.add('show');
