@@ -219,7 +219,7 @@
 </head>
 <body>
 
-<div class="hud hidden" id="hud">1 / 19</div>
+<div class="hud hidden" id="hud">1 / 20</div>
 <button class="fs-btn" onclick="toggleFs()" title="Полноэкранный режим">⛶</button>
 
 <div class="stage" id="stage">
@@ -284,6 +284,10 @@
       options: ["Плавание", "Гимнастика", "Футбол"], correct: 2,
       media: { type: 'video', src: 'quiz_media/futbol.mp4' },
       story: "Будущий чемпион ⚽" },
+    { q: "Самое необычное место, где Тимур играл в футбол?",
+      options: ["На крыше небоскрёба в Дубае", "В фавелах Рио-де-Жанейро", "На пляже в Сан-Франциско"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/favely.mp4' },
+      story: "Те самые фавелы Рио 🇧🇷⚽" },
     { q: "Папа держал малыша Тимура за ноги вертикально вперёд. Как Тимур держался?",
       options: ["Болтался во все стороны", "Держал спину идеально прямо", "Висел расслабленно"], correct: 1,
       media: { type: 'video', src: 'quiz_media/papa_nogi.mp4' },
@@ -320,7 +324,7 @@
         <div class="intro">
           <div class="emoji-row">🎂 🎈 🎉</div>
           <h1>Викторина<br>про Тимура</h1>
-          <h2>3 года — 19 вопросов про именинника</h2>
+          <h2>3 года — 20 вопросов про именинника</h2>
           <div class="hint">▶ Нажми пробел или кликни</div>
         </div>`;
     } else if (phase === 'question' || phase === 'answer') {
