@@ -579,7 +579,7 @@ document.getElementById('wa-link').href = `https://wa.me/${WHATSAPP_NUMBER}?text
   }
 })();
 
-// Positions distributed: 1, 2, 1, 0, 2, 0, 1 — никогда два правильных ответа подряд на одной позиции
+// Positions distributed: 1, 2, 1, 0, 1, 2, 0, 1 — никогда два правильных ответа подряд на одной позиции
 const QUESTIONS = [
   {
     q: '¿Cuántos años cumple Timur hoy?',
@@ -606,6 +606,12 @@ const QUESTIONS = [
     feedback: { emoji: '⚽', text: '¡Juego al fútbol!', video: 'assets/tim/football.mp4' }
   },
   {
+    q: '¿Qué otro deporte ama Timur?',
+    options: ['Tenis', 'Natación', 'Ciclismo'],
+    correct: 1,
+    feedback: { emoji: '🏊', text: '¡Nado como un pececito! 🐟', video: 'assets/tim/swimming.mp4' }
+  },
+  {
     q: '¿Cuántas veces voló en avión en su vida?',
     options: ['Cinco', 'Quince', 'Treinta'],
     correct: 2,
@@ -621,7 +627,7 @@ const QUESTIONS = [
     q: '¿Cuál es su comida favorita?',
     options: ['Pizza', 'Pelmeni y rolls', 'Hamburguesa'],
     correct: 1,
-    feedback: { emoji: '🥟', text: '¡Me encantan los пельмени (comida rusa: masa rellena de carne) y los rolls!', photo: 'assets/tim/tim-07.jpg' }
+    feedback: { emoji: '🥟', text: '¡Me encantan los пельмени (comida rusa: masa rellena de carne) y los rolls!', video: 'assets/tim/rolls.mp4' }
   }
 ];
 
