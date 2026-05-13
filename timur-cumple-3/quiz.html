@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Викторина — Тимур 3 года</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background:
+      radial-gradient(circle at 20% 10%, #fef3c7 0%, transparent 40%),
+      radial-gradient(circle at 80% 30%, #fbcfe8 0%, transparent 45%),
+      radial-gradient(circle at 30% 80%, #c7d2fe 0%, transparent 40%),
+      linear-gradient(180deg, #fff7ed 0%, #fce7f3 60%, #ddd6fe 100%);
+    color: #4c1d95;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+    transition: background 0.6s ease;
+  }
+  body.bg-correct {
+    background: radial-gradient(circle at center, #86efac 0%, #22c55e 60%, #15803d 100%);
+    color: #052e16;
+  }
+
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 50px 40px;
+  }
+  .screen { display: none; width: 100%; max-width: 1500px; }
+  .screen.active { display: block; animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.88); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-4deg); }
+    75% { transform: rotate(4deg); }
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px 4px rgba(34,197,94,0.4), 0 12px 32px rgba(0,0,0,0.15); }
+    50% { box-shadow: 0 0 40px 12px rgba(34,197,94,0.7), 0 12px 32px rgba(0,0,0,0.15); }
+  }
+
+  /* INTRO */
+  .intro .emoji-row {
+    font-size: 80px; letter-spacing: 30px; margin-bottom: 30px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+  .intro h1 {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(60px, 9vw, 140px); line-height: 1;
+    background: linear-gradient(135deg, #fb7185 0%, #f59e0b 50%, #a855f7 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 24px;
+  }
+  .intro h2 {
+    font-size: clamp(26px, 3vw, 44px);
+    color: #6b21a8; font-weight: 800; margin-bottom: 50px;
+  }
+  .intro .hint {
+    font-size: clamp(18px, 1.8vw, 26px);
+    color: #7c3aed; font-weight: 700;
+    background: rgba(255,255,255,0.7);
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(168,85,247,0.2);
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  /* QUESTION */
+  .q-num {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(24px, 2.6vw, 38px);
+    color: #fb7185;
+    margin-bottom: 22px;
+    letter-spacing: 4px;
+  }
+  .q-text {
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: clamp(32px, 4.5vw, 68px);
+    line-height: 1.15;
+    color: #4c1d95;
+    margin-bottom: 50px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .options {
+    display: flex; flex-direction: column; gap: 20px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .option {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,0.78);
+    border-radius: 24px;
+    padding: 22px 32px;
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: clamp(26px, 3.2vw, 44px);
+    color: #4c1d95;
+    box-shadow: 0 8px 24px rgba(76,29,149,0.12);
+    text-align: left;
+    transition: all 0.4s ease;
+  }
+  .option-letter {
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    width: clamp(50px, 5vw, 72px); height: clamp(50px, 5vw, 72px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #6b21a8);
+    color: white;
+    font-weight: 700;
+    margin-right: 24px;
+    font-size: clamp(24px, 2.6vw, 36px);
+  }
+  .option-text { flex: 1; }
+
+  /* ANSWER state */
+  .option.correct {
+    background: linear-gradient(135deg, #86efac, #22c55e);
+    color: white;
+    transform: scale(1.04);
+    animation: glow 1.8s ease-in-out infinite;
+  }
+  .option.correct .option-letter {
+    background: white;
+    color: #15803d;
+  }
+  .option.dim {
+    opacity: 0.45;
+  }
+  .option.correct::after {
+    content: '✅';
+    margin-left: 16px;
+    font-size: clamp(32px, 3.6vw, 48px);
+    flex-shrink: 0;
+  }
+
+  /* STORY slide: big media + caption */
+  .story-caption {
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: clamp(34px, 4.5vw, 64px);
+    line-height: 1.15;
+    color: #4c1d95;
+    margin-bottom: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .story-media {
+    max-width: min(1100px, 92vw);
+    max-height: 68vh;
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .story-media img, .story-media video {
+    display: block;
+    max-width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+    border-radius: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  }
+
+  /* FINAL */
+  .final h1 {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(70px, 10vw, 160px);
+    background: linear-gradient(135deg, #fb7185 0%, #f59e0b 50%, #a855f7 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+  .final p {
+    font-size: clamp(26px, 3vw, 40px);
+    color: #6b21a8; font-weight: 800;
+  }
+  .final .emoji-row {
+    font-size: 80px; letter-spacing: 24px; margin-top: 40px;
+    animation: float 2.5s ease-in-out infinite;
+  }
+
+  /* HUD */
+  .hud {
+    position: fixed; top: 24px; right: 32px;
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 24px;
+    background: rgba(255,255,255,0.75);
+    padding: 10px 22px; border-radius: 50px;
+    color: #6b21a8;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  .hud.hidden { display: none; }
+  .fs-btn {
+    position: fixed; bottom: 24px; right: 32px;
+    background: rgba(255,255,255,0.75);
+    border: none; cursor: pointer;
+    width: 56px; height: 56px; border-radius: 50%;
+    font-size: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="hud hidden" id="hud">1 / 19</div>
+<button class="fs-btn" onclick="toggleFs()" title="Полноэкранный режим">⛶</button>
+
+<div class="stage" id="stage">
+  <div class="screen active"></div>
+</div>
+
+<script>
+  const questions = [
+    { q: "Во сколько Тимур научился нырять?",
+      options: ["В 3 месяца", "В 1 год", "В 2 года"], correct: 0,
+      media: { type: 'video', src: 'quiz_media/nyrnul.mp4' },
+      story: "Настоящий рыбёнок — нырял ещё до того, как научился сидеть!" },
+    { q: "Как Тимур называл сам себя в детстве?",
+      options: ["Тима", "Муть", "Тёма"], correct: 1 },
+    { q: "Кто чуть не украл Тимура?",
+      options: ["Сосед", "Незнакомка в парке", "Таксист"], correct: 2 },
+    { q: "Во сколько Тимур выучил весь алфавит?",
+      options: ["В 1 год", "В 2 года 10 месяцев", "В 3 года"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/alfavit.mp4' },
+      story: "А вот и сам Тимур-алфавитист 🔤" },
+    { q: "Какой взрослый напиток Тимур уже попробовал?",
+      options: ["Виски", "Текила", "Шампанское"], correct: 2,
+      media: { type: 'video', src: 'quiz_media/shampanskoe.mp4' },
+      story: "А вот и доказательство 🍾" },
+    { q: "Сколько перелётов уже было у Тимура за 3 года?",
+      options: ["Около 10", "Около 30", "Около 50"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/perelety.mp4' },
+      story: "Настоящий путешественник ✈️" },
+    { q: "Что Тимур обожает делать в бане?",
+      options: ["Спать на полке", "Пить квас", "Париться"], correct: 2,
+      media: { type: 'video', src: 'quiz_media/banya.mp4' },
+      story: "Парится как настоящий банщик!" },
+    { q: "На кого Тимур похож рыжими кудрями?",
+      options: ["На папу", "На дядю", "На дедушку"], correct: 2,
+      media: { type: 'img', src: 'quiz_media/ryzhiy.jpg' },
+      story: "Кудри — точная копия дедушкиных!" },
+    { q: "Кто побрил Тимура налысо без разрешения родителей?",
+      options: ["Парикмахер", "Няня", "Дедушка"], correct: 1,
+      media: { type: 'img', src: 'quiz_media/nalyso.jpg' },
+      story: "Та самая стрижка от няни — без спроса!" },
+    { q: "Какие любимые блюда у Тимура?",
+      options: ["Борщ и каша", "Картошка и котлета", "Пельмени и роллы"], correct: 2,
+      media: { type: 'video', src: 'quiz_media/rolly.mp4' },
+      story: "Роллы — главная любовь!" },
+    { q: "Где из этих мест уже побывал Тимур?",
+      options: ["Япония", "Мальдивы", "Австралия"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/maldivi.mp4' },
+      story: "Тимур на Мальдивах 🏝️" },
+    { q: "Что случилось с Тимуром на Мальдивах?",
+      options: ["Поймал маленькую рыбу руками", "Упал лицом в песок", "Уснул в шезлонге"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/peski.mp4' },
+      story: "То самое падение лицом в песок 😅" },
+    { q: "Где Тимур впервые увидел снег?",
+      options: ["В Москве", "В Барилоче на горе", "В Альпах"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/sneg.mp4' },
+      story: "Первый снег — в Барилоче ❄️" },
+    { q: "С какой игрушкой Тимур засыпает?",
+      options: ["Мишка-топтыжка", "Зайка-побегайка", "Киска-сосиска"], correct: 2,
+      media: { type: 'img', src: 'quiz_media/kiska.jpg' },
+      story: "Знакомьтесь — Киска-сосиска!" },
+    { q: "Каким видом спорта серьёзно занимается Тимур?",
+      options: ["Плавание", "Гимнастика", "Футбол"], correct: 2,
+      media: { type: 'video', src: 'quiz_media/futbol.mp4' },
+      story: "Будущий чемпион ⚽" },
+    { q: "Папа держал малыша Тимура за ноги вертикально вперёд. Как Тимур держался?",
+      options: ["Болтался во все стороны", "Держал спину идеально прямо", "Висел расслабленно"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/papa_nogi.mp4' },
+      story: "Как маленький гимнаст 💪" },
+    { q: "Кем работала няня Тимура, которая научила его петь?",
+      options: ["Балериной", "Учительницей в школе", "Оперной певицей"], correct: 2,
+      media: { type: 'video', src: 'quiz_media/poet.mp4' },
+      story: "Тимур поёт — слушайте сами!" },
+    { q: "На какого мультяшного героя Тимур был похож в младенчестве?",
+      options: ["На Шрека", "На Босса-молокососа", "На Карлсона"], correct: 1,
+      media: { type: 'img', src: 'quiz_media/boss.jpg' },
+      story: "Один в один — маленький Босс! 👶💼" },
+    { q: "Где Тимур сломал зуб?",
+      options: ["В детском саду", "На детской площадке", "В ванной"], correct: 2 },
+  ];
+
+  const stage = document.getElementById('stage');
+  const hud = document.getElementById('hud');
+  let idx = -1;
+  let phase = 'intro';
+  const letters = ['А', 'Б', 'В'];
+
+  function render() {
+    const old = stage.querySelector('.screen');
+    if (old) old.remove();
+    document.body.classList.remove('bg-correct');
+
+    const screen = document.createElement('div');
+    screen.className = 'screen active';
+
+    if (phase === 'intro') {
+      hud.classList.add('hidden');
+      screen.innerHTML = `
+        <div class="intro">
+          <div class="emoji-row">🎂 🎈 🎉</div>
+          <h1>Викторина<br>про Тимура</h1>
+          <h2>3 года — 19 вопросов про именинника</h2>
+          <div class="hint">▶ Нажми пробел или кликни</div>
+        </div>`;
+    } else if (phase === 'question' || phase === 'answer') {
+      hud.classList.remove('hidden');
+      hud.textContent = `${idx + 1} / ${questions.length}`;
+      const item = questions[idx];
+      const isAnswer = phase === 'answer';
+      if (isAnswer) document.body.classList.add('bg-correct');
+
+      const optsHtml = item.options.map((opt, i) => {
+        let cls = 'option';
+        if (isAnswer) cls += (i === item.correct) ? ' correct' : ' dim';
+        return `<div class="${cls}"><div class="option-letter">${letters[i]}</div><div class="option-text">${opt}</div></div>`;
+      }).join('');
+
+      screen.innerHTML = `
+        <div class="q-num">ВОПРОС ${idx + 1}</div>
+        <div class="q-text">${item.q}</div>
+        <div class="options">${optsHtml}</div>`;
+    } else if (phase === 'story') {
+      hud.classList.remove('hidden');
+      hud.textContent = `${idx + 1} / ${questions.length}`;
+      const item = questions[idx];
+      document.body.classList.add('bg-correct');
+      let mediaHtml = '';
+      if (item.media.type === 'img') {
+        mediaHtml = `<div class="story-media"><img src="${item.media.src}" alt=""></div>`;
+      } else {
+        mediaHtml = `<div class="story-media"><video src="${item.media.src}" autoplay playsinline controls></video></div>`;
+      }
+      const captionHtml = item.story ? `<div class="story-caption">${item.story}</div>` : '';
+      screen.innerHTML = `${captionHtml}${mediaHtml}`;
+    } else if (phase === 'final') {
+      hud.classList.add('hidden');
+      screen.innerHTML = `
+        <div class="final">
+          <h1>С Днём Рождения,<br>Тимур!</h1>
+          <p>3 года — а историй уже на целую жизнь 💛</p>
+          <div class="emoji-row">🎂 🎈 🎁 🎉</div>
+        </div>`;
+    }
+    stage.appendChild(screen);
+  }
+
+  function next() {
+    if (phase === 'intro') { idx = 0; phase = 'question'; }
+    else if (phase === 'question') { phase = 'answer'; }
+    else if (phase === 'answer') {
+      if (questions[idx].media) { phase = 'story'; }
+      else if (idx + 1 >= questions.length) { phase = 'final'; }
+      else { idx++; phase = 'question'; }
+    } else if (phase === 'story') {
+      if (idx + 1 >= questions.length) { phase = 'final'; }
+      else { idx++; phase = 'question'; }
+    } else if (phase === 'final') { idx = -1; phase = 'intro'; }
+    render();
+  }
+
+  function prev() {
+    if (phase === 'final') {
+      idx = questions.length - 1;
+      phase = questions[idx].media ? 'story' : 'answer';
+    }
+    else if (phase === 'story') { phase = 'answer'; }
+    else if (phase === 'answer') { phase = 'question'; }
+    else if (phase === 'question') {
+      if (idx === 0) { phase = 'intro'; idx = -1; }
+      else { idx--; phase = questions[idx].media ? 'story' : 'answer'; }
+    }
+    render();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') { e.preventDefault(); next(); }
+    else if (e.code === 'ArrowLeft' || e.code === 'Backspace') { e.preventDefault(); prev(); }
+    else if (e.code === 'KeyF') { toggleFs(); }
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('.fs-btn')) return;
+    if (e.target.closest('.story-media')) return;
+    next();
+  });
+
+  function toggleFs() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+
+  render();
+</script>
+</body>
+</html>
