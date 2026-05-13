@@ -579,7 +579,7 @@ document.getElementById('wa-link').href = `https://wa.me/${WHATSAPP_NUMBER}?text
   }
 })();
 
-// Positions distributed: 1, 2, 1, 0, 1, 2, 0, 1 — никогда два правильных ответа подряд на одной позиции
+// Positions distributed: 1, 2, 1, 0, 1, 0, 1 — никогда два правильных ответа подряд на одной позиции
 const QUESTIONS = [
   {
     q: '¿Cuántos años cumple Timur hoy?',
@@ -610,12 +610,6 @@ const QUESTIONS = [
     options: ['Tenis', 'Natación', 'Ciclismo'],
     correct: 1,
     feedback: { emoji: '🏊', text: '¡Nado como un pececito! 🐟', video: 'assets/tim/swimming.mp4' }
-  },
-  {
-    q: '¿Cuántas veces voló en avión en su vida?',
-    options: ['Cinco', 'Quince', 'Treinta'],
-    correct: 2,
-    feedback: { emoji: '✈️', text: '¡30 vuelos en 3 años!', photo: 'assets/tim/tim-05.jpg' }
   },
   {
     q: '¿Con qué peluche duerme Timur?',
