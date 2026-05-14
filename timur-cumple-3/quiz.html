@@ -207,7 +207,7 @@
   }
   .hud.hidden { display: none; }
   .fs-btn {
-    position: fixed; bottom: 24px; right: 32px;
+    position: fixed; top: 24px; left: 32px;
     background: rgba(255,255,255,0.75);
     border: none; cursor: pointer;
     width: 56px; height: 56px; border-radius: 50%;
@@ -215,12 +215,34 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     z-index: 10;
   }
+  .nav-btn {
+    position: fixed; bottom: 28px;
+    background: rgba(255,255,255,0.85);
+    border: none; cursor: pointer;
+    height: 70px;
+    padding: 0 28px;
+    border-radius: 50px;
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 26px;
+    color: #6b21a8;
+    box-shadow: 0 8px 24px rgba(76,29,149,0.18);
+    z-index: 10;
+    display: flex; align-items: center; gap: 10px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(76,29,149,0.25); }
+  .nav-btn:active { transform: translateY(0); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav-btn.prev { left: 32px; }
+  .nav-btn.next { right: 32px; }
 </style>
 </head>
 <body>
 
 <div class="hud hidden" id="hud">1 / 22</div>
 <button class="fs-btn" onclick="toggleFs()" title="Полноэкранный режим">⛶</button>
+<button class="nav-btn prev" id="prevBtn" onclick="prev()">← Назад</button>
+<button class="nav-btn next" id="nextBtn" onclick="next()">Вперёд →</button>
 
 <div class="stage" id="stage">
   <div class="screen active"></div>
@@ -412,6 +434,7 @@
   });
   document.addEventListener('click', e => {
     if (e.target.closest('.fs-btn')) return;
+    if (e.target.closest('.nav-btn')) return;
     if (e.target.closest('.story-media')) return;
     next();
   });
