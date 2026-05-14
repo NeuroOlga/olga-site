@@ -219,7 +219,7 @@
 </head>
 <body>
 
-<div class="hud hidden" id="hud">1 / 21</div>
+<div class="hud hidden" id="hud">1 / 22</div>
 <button class="fs-btn" onclick="toggleFs()" title="Полноэкранный режим">⛶</button>
 
 <div class="stage" id="stage">
@@ -292,6 +292,10 @@
       options: ["Кудри", "Только один чуб", "Лысый"], correct: 1,
       media: { type: 'video', src: 'quiz_media/chub.mp4' },
       story: "Тот самый чуб 💇" },
+    { q: "Что самое экстремальное делал Тимур?",
+      options: ["Прыгнул с трёхметровой вышки в бассейн", "Плавал под большие водопады на лодке", "Покатался на квадроцикле один"], correct: 1,
+      media: { type: 'video', src: 'quiz_media/vodopad.mp4' },
+      story: "Под самые большие водопады — на лодке 🌊" },
     { q: "Папа держал малыша Тимура за ноги вертикально вперёд. Как Тимур держался?",
       options: ["Болтался во все стороны", "Держал спину идеально прямо", "Висел расслабленно"], correct: 1,
       media: { type: 'video', src: 'quiz_media/papa_nogi.mp4' },
@@ -328,7 +332,7 @@
         <div class="intro">
           <div class="emoji-row">🎂 🎈 🎉</div>
           <h1>Викторина<br>про Тимура</h1>
-          <h2>3 года — 21 вопрос про именинника</h2>
+          <h2>3 года — 22 вопроса про именинника</h2>
           <div class="hint">▶ Нажми пробел или кликни</div>
         </div>`;
     } else if (phase === 'question' || phase === 'answer') {
