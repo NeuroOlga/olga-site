@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MontiKids · Guía para la comunidad rusa</title>
+<style>
+  :root{
+    --azul:#2d7ff9;
+    --azul-osc:#1a5fd0;
+    --rosa:#ff5d8f;
+    --amarillo:#ffc23c;
+    --verde:#25d366;
+    --texto:#23304a;
+    --suave:#5b6b86;
+    --fondo:#f4f7fc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 60px;}
+
+  /* Cabecera */
+  header{
+    background:linear-gradient(135deg,var(--azul) 0%,var(--rosa) 100%);
+    color:#fff;
+    text-align:center;
+    padding:46px 22px 40px;
+    border-radius:0 0 32px 32px;
+  }
+  header .logo{
+    font-size:13px;font-weight:800;letter-spacing:2px;
+    text-transform:uppercase;opacity:.9;
+  }
+  header h1{font-size:27px;margin:10px 0 8px;line-height:1.25;}
+  header p{font-size:15px;opacity:.95;max-width:460px;margin:0 auto;}
+
+  .intro{
+    background:#fff;border-radius:18px;padding:20px 22px;
+    margin:-26px auto 30px;box-shadow:0 8px 28px rgba(45,127,249,.12);
+    font-size:15px;
+  }
+  .intro b{color:var(--azul-osc);}
+
+  /* Pasos */
+  .paso{
+    background:#fff;border-radius:18px;padding:24px 22px;
+    margin-bottom:18px;box-shadow:0 4px 18px rgba(35,48,74,.06);
+  }
+  .paso-cab{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .num{
+    flex:none;width:42px;height:42px;border-radius:50%;
+    background:var(--azul);color:#fff;font-weight:800;font-size:19px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .paso h2{font-size:19px;line-height:1.3;}
+  .paso p{margin:9px 0;font-size:15px;}
+  .paso ul{margin:8px 0 8px 4px;padding-left:20px;}
+  .paso li{margin:6px 0;font-size:15px;}
+
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 18px;border-radius:12px;text-decoration:none;
+    font-weight:700;font-size:14px;color:#fff;
+  }
+  .btn-azul{background:var(--azul);}
+  .btn-osc{background:#23304a;}
+  .btn-verde{background:var(--verde);}
+
+  .nota{
+    background:#fff8e6;border-left:4px solid var(--amarillo);
+    border-radius:8px;padding:12px 14px;margin:14px 0 4px;font-size:14px;
+  }
+  .nota b{color:#a9760a;}
+  .ojo{
+    background:#ffeef3;border-left:4px solid var(--rosa);
+    border-radius:8px;padding:12px 14px;margin:14px 0 4px;font-size:14px;
+  }
+
+  /* Chats */
+  .chat{
+    display:block;text-decoration:none;
+    background:#eaf2ff;border-radius:12px;padding:11px 14px;margin-bottom:9px;
+  }
+  .chat b{display:block;font-size:15px;color:var(--azul-osc);}
+  .chat span{font-size:12.5px;color:var(--suave);word-break:break-all;}
+  .chat.rev{background:#fff8e6;}
+  .chat.rev b{color:#a9760a;}
+
+  /* Reglas */
+  .regla{display:flex;gap:12px;margin:13px 0;}
+  .regla .ic{
+    flex:none;width:30px;height:30px;border-radius:9px;
+    background:#eaf2ff;display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+  }
+  .regla b{display:block;font-size:15px;}
+  .regla span{font-size:14px;color:var(--suave);}
+
+  /* Texto ruso */
+  .ruso{
+    background:#1f2a44;color:#e9eefc;border-radius:14px;
+    padding:18px 18px 14px;margin:14px 0 6px;
+    font-size:14.5px;white-space:pre-wrap;line-height:1.7;
+  }
+  .copiar{
+    width:100%;margin-top:6px;padding:12px;border:0;border-radius:11px;
+    background:var(--azul);color:#fff;font-weight:700;font-size:15px;
+    cursor:pointer;
+  }
+  .copiar:active{background:var(--azul-osc);}
+
+  /* Pie */
+  .pie{
+    background:linear-gradient(135deg,var(--rosa),var(--azul));
+    color:#fff;border-radius:20px;padding:28px 24px;text-align:center;
+    margin-top:24px;
+  }
+  .pie h2{font-size:20px;margin-bottom:6px;}
+  .pie p{font-size:14px;opacity:.95;margin-bottom:14px;}
+  .pie .btn{margin:0 auto;}
+  .firma{text-align:center;color:var(--suave);font-size:13px;margin-top:22px;}
+  .checklist{list-style:none;padding:0;}
+  .checklist li{padding-left:26px;position:relative;margin:7px 0;font-size:15px;}
+  .checklist li:before{
+    content:"✓";position:absolute;left:0;color:var(--verde);font-weight:800;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎈 MontiKids</div>
+  <h1>Cómo promocionar MontiKids en la comunidad rusa de Buenos Aires</h1>
+  <p>Una guía simple, paso a paso. No hace falta saber nada de tecnología.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    En Buenos Aires hay <b>muchísimas familias rusas</b>, y casi siempre están
+    organizando fiestas para sus hijos. Para ellas, alquilar los juegos es
+    comodísimo: se los llevan armados directo a su salón o espacio. Estas familias
+    se comunican por una app llamada <b>Telegram</b> (parecida a WhatsApp), en
+    <b>grupos de chat</b> donde se recomiendan servicios para fiestas infantiles.
+    Esta guía les muestra cómo entrar a esos grupos y publicar.
+    <b>Olga</b> los ayuda en cada paso.
+  </div>
+
+  <!-- PASO 1 -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">1</div>
+      <h2>Descargar Telegram</h2>
+    </div>
+    <p>Telegram es una app de mensajería gratuita, igual que WhatsApp pero con
+    grupos más grandes. Es donde están los chats de las familias rusas.</p>
+    <p>Descárguenla en el celular desde la tienda de aplicaciones:</p>
+    <div class="btns">
+      <a class="btn btn-azul" href="https://apps.apple.com/app/telegram-messenger/id686449807">📱 iPhone (App Store)</a>
+      <a class="btn btn-osc" href="https://play.google.com/store/apps/details?id=org.telegram.messenger">🤖 Android (Google Play)</a>
+    </div>
+    <div class="nota"><b>Tip:</b> también pueden buscar la palabra <b>«Telegram»</b>
+    directamente en la tienda de apps del celular. El ícono es un avión de papel azul.</div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">2</div>
+      <h2>Crear la cuenta</h2>
+    </div>
+    <p>Abran la app y sigan estos pasos:</p>
+    <ul>
+      <li>Toquen <b>«Start Messaging» / «Comenzar»</b>.</li>
+      <li>Pongan su <b>número de celular</b> (el mismo del WhatsApp del negocio).</li>
+      <li>Les llega un <b>código por SMS</b> — ingrésenlo.</li>
+      <li>Escriban el nombre: pongan <b>«MontiKids»</b> para que se vea profesional.</li>
+      <li>Suban el <b>logo de MontiKids</b> como foto de perfil.</li>
+    </ul>
+    <div class="nota"><b>Importante:</b> el nombre y la foto deben decir «MontiKids».
+    Así, cuando publiquen en un grupo, los padres ven una marca seria y confían.</div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">3</div>
+      <h2>Entrar a los chats de las familias rusas</h2>
+    </div>
+    <p>Acá están los chats de la comunidad rusa en Buenos Aires. Toquen cada
+    enlace → se abre Telegram → toquen <b>«Unirse» / «Join»</b>.</p>
+
+    <div class="chats">
+      <a class="chat" href="https://t.me/russians_in_buenosaires"><b>🔗 Rusos en Buenos Aires</b><span>t.me/russians_in_buenosaires</span></a>
+      <a class="chat" href="https://t.me/russians_in_argentina"><b>🔗 Rusos en Argentina</b><span>t.me/russians_in_argentina</span></a>
+      <a class="chat" href="https://t.me/WUOGK5NQfzthZDUx"><b>🔗 Chat de la comunidad</b><span>t.me/WUOGK5NQfzthZDUx</span></a>
+      <a class="chat" href="https://t.me/ARGDOM"><b>🔗 ArgDom — gran foro de la comunidad</b><span>t.me/ARGDOM</span></a>
+    </div>
+
+    <div class="nota"><b>Sobre ArgDom:</b> es un foro grande dividido en
+    secciones. Primero únanse a ArgDom con el enlace de arriba — recién después
+    se abren estas secciones internas:</div>
+    <div class="chats">
+      <a class="chat" href="https://t.me/ARGDOM/2831"><b>↳ ArgDom · publicidad y anuncios</b><span>t.me/ARGDOM/2831</span></a>
+      <a class="chat" href="https://t.me/ARGDOM/78"><b>↳ ArgDom · publicidad y anuncios</b><span>t.me/ARGDOM/78</span></a>
+    </div>
+
+    <p style="margin-top:18px"><b>⭐ Sección especial de reseñas</b></p>
+    <a class="chat rev" href="https://t.me/ARGDOM/78787"><b>⭐ ArgDom · Reseñas</b><span>t.me/ARGDOM/78787</span></a>
+    <div class="nota">Es una sección de ArgDom para <b>reseñas y opiniones</b>.
+    Acá <u>no</u> se publica el anuncio. En cambio, pídanle a <b>todos sus
+    clientes rusos</b> que dejen ahí una reseña de MontiKids. Las recomendaciones
+    reales son lo que más confianza genera.</div>
+
+    <div class="ojo"><b>⚠️ Antes de publicar nada:</b> escriban por privado al
+    <b>administrador del grupo</b>, preséntense como MontiKids y pregunten si
+    permiten una publicación comercial. Nunca publiquen sin avisar — es la regla
+    número uno.</div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">4</div>
+      <h2>Reglas de oro para publicar</h2>
+    </div>
+
+    <div class="regla">
+      <div class="ic">🙋</div>
+      <div><b>Pedir permiso primero</b><span>Siempre avisar al administrador antes de publicar.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">🇷🇺</div>
+      <div><b>Publicar en ruso</b><span>Usen el texto listo que está abajo. No publiquen en español.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">📷</div>
+      <div><b>Siempre con fotos o video</b><span>Adjunten 3 a 5 fotos de fiestas reales o un video corto. Sin imágenes, casi nadie escribe.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">📣</div>
+      <div><b>Publicar seguido</b><span>Al contrario: cuanto más publican, más los ven y los recuerdan. Publiquen varias veces, no una sola.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">⚡</div>
+      <div><b>Responder rápido</b><span>Si alguien escribe, contestar el mismo día. Si no saben ruso, usen un traductor.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">🕘</div>
+      <div><b>Buen horario</b><span>Días de semana, de 9 a 11 h o de 20 a 22 h.</span></div>
+    </div>
+    <div class="regla">
+      <div class="ic">🚫</div>
+      <div><b>Nada de spam</b><span>No etiquetar a todos ni mandar mensajes privados masivos: molesta a las familias y da mala imagen.</span></div>
+    </div>
+  </div>
+
+  <!-- PASO 5 -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">5</div>
+      <h2>El mensaje listo (en ruso)</h2>
+    </div>
+    <p>Copien este texto y péguenlo en el grupo:</p>
+
+    <div class="ruso" id="textoRuso">Добрый день! 🎈
+Мы — MontiKids. Аренда игрушек и тематических игровых зон для детских праздников: батуты, шары, горки, доски для рисования и многое другое.
+Посмотреть, как это выглядит, можно у нас в Instagram: @montikidsok
+Работаем по всему Буэнос-Айресу — привозим, собираем и забираем сами.
+Напишите нам имя ребёнка и тему праздника — подберём для вас тематическую игровую локацию (например, бассейн с шариками 🩵).
+WhatsApp / Telegram: +54 9 11 7620-4653</div>
+    <button class="copiar" onclick="copiar()">📋 Copiar el texto</button>
+
+    <div class="ojo"><b>📷 Muy importante:</b> adjunten siempre <b>fotos o un video</b>
+    de fiestas reales junto a este mensaje. Así las familias ven cómo queda y se
+    animan a escribir. Un mensaje sin fotos casi no recibe respuestas.</div>
+
+    <div class="nota"><b>Qué dice el texto:</b> se presenta MontiKids y los juegos,
+    aclara que trabajan en todo Buenos Aires, comparte el Instagram e invita a las
+    familias a escribir <b>el nombre del niño y el tema de la fiesta</b> para armarles
+    un espacio temático. Termina con los contactos de WhatsApp y Telegram.</div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="paso">
+    <div class="paso-cab">
+      <div class="num">✓</div>
+      <h2>Resumen rápido</h2>
+    </div>
+    <ul class="checklist">
+      <li>Descargar Telegram y crear la cuenta «MontiKids».</li>
+      <li>Entrar a todos los chats de la lista (Paso 3).</li>
+      <li>Escribir al administrador y pedir permiso.</li>
+      <li>Publicar el texto en ruso, siempre con fotos o video.</li>
+      <li>Publicar seguido y responder rápido a quien escriba.</li>
+      <li>Pedir a los clientes rusos que dejen reseñas en el chat de reseñas.</li>
+    </ul>
+  </div>
+
+  <!-- PIE -->
+  <div class="pie">
+    <h2>¿Dudas?</h2>
+    <p>Olga los acompaña en cada paso: enlaces de los grupos, traducciones y el texto en ruso.</p>
+    <a class="btn btn-verde" href="https://wa.me/541176204653">💬 Escribir por WhatsApp</a>
+  </div>
+
+  <p class="firma">Guía preparada para MontiKids 🎈 · Instagram @montikidsok</p>
+
+</div>
+
+<script>
+function copiar(){
+  var t = document.getElementById('textoRuso').innerText;
+  navigator.clipboard.writeText(t).then(function(){
+    var b = document.querySelector('.copiar');
+    b.textContent = '✅ ¡Copiado!';
+    setTimeout(function(){ b.textContent = '📋 Copiar el texto'; }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
